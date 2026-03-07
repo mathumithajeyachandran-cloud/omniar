@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OmniSite AI: Hybrid BIM Platform</title>
+    
+    <!-- Google Model-Viewer Script (Latest Version) -->
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a; /* Dark background for better visibility of Blue/Yellow pipes */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+
+        /* Full Screen 3D Viewer */
+        model-viewer {
+            width: 100%;
+            height: 100vh;
+            --poster-color: transparent;
+        }
+
+        /* Floating Dashboard (The 'Smart' Part) */
+        .dashboard {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #00ff00; /* Green color for 'Live' look */
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #333;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .dashboard h2 { margin: 0 0 10px 0; font-size: 16px; text-transform: uppercase; }
+        .dashboard p { margin: 5px 0; font-size: 13px; color: #fff; }
+        .status-dot { height: 100px; width: 10px; background-color: #00ff00; border-radius: 50%; display: inline-block; margin-right: 5px; }
+
+        /* AR Button Styling */
+        #ar-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 50px;
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0, 123, 255, 0.4);
+            z-index: 100;
+        }
+
+        #ar-button:active { background-color: #0056b3; }
+
+        /* Loading Indicator */
+        #lazy-load-poster {
+            position: absolute;
+            left: 0; right: 0; top: 0; bottom: 0;
+            background-color: #1a1a1a;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Smart Dashboard Overlay -->
+    <div class="dashboard">
+        <h2>OmniSite AI: Site Monitor</h2>
+        <p><span class="status-dot"></span> System Status: <b>Online</b></p>
+        <p>BIM Layer: <b>X-Ray (Plumbing/Elec)</b></p>
+        <p>IoT Temp: <span id="temp">32.4</span> °C</p>
+        <p>Progress: <span style="color:#00ff00;">Tracked via AI Video</span></p>
+    </div>
+
+    <!-- 3D & AR Model Viewer -->
+    <!-- src='omninew.glb' must match your GitHub filename exactly -->
+    <model-viewer 
+        src="omninew.glb" 
+        ar 
+        ar-modes="webxr scene-viewer quick-look" 
+        camera-controls 
+        shadow-intensity="1" 
+        auto-rotate 
+        environment-image="neutral"
+        exposure="1"
+        interaction-prompt="auto">
+        
+        <!-- Custom AR Button -->
+        <button slot="ar-button" id="ar-button">
+            🚀 START X-RAY SITE VIEW
+        </button>
+
+        <div id="lazy-load-poster" slot="poster">
+            <p>Loading Smart BIM Model...</p>
+        </div>
+
+    </model-viewer>
+
+    <script>
+        // Simulate Live IoT Data changing
+        setInterval(() => {
+            const temp = (32 + Math.random()).toFixed(1);
+            document.getElementById('temp').innerText = temp;
+        }, 3000);
+    </script>
+
+</body>
+</html>
