@@ -109,6 +109,25 @@
         </div>
 
     </model-viewer>
+    <model-viewer ...>
+    <!-- Add this Hotspot for the Yellow Pipe -->
+    <button class="hotspot" slot="hotspot-elec" 
+            data-position="4.8m 2m 1.5m" data-normal="1m 0m 0m" 
+            style="background: yellow; border: 2px solid black; border-radius: 50%; width: 20px; height: 20px; cursor: pointer;">
+        <div class="annotation" style="display: none; position: absolute; background: white; color: black; padding: 5px; border-radius: 5px; width: 150px; left: 25px;">
+            <b>Electrical Line:</b> 230V <br> Status: Tracked via AI
+        </div>
+    </button>
+</model-viewer>
+
+<script>
+    // Hotspot click panna annotation theriyum
+    const hotspot = document.querySelector('.hotspot');
+    const annotation = document.querySelector('.annotation');
+    hotspot.onclick = () => {
+        annotation.style.display = (annotation.style.display === 'none') ? 'block' : 'none';
+    };
+</script>
 
     <script>
         // Simulate Live IoT Data changing
