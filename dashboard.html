@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OmniSite AR - Live Analysis Dashboard</title>
-    <!-- Firebase & Chart Scripts -->
+    <title>OmniSite AR - Live Dashboard</title>
+    <!-- Firebase Standard Libraries -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; padding: 20px; text-align: center; }
         .container { max-width: 800px; margin: auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .progress-bar { background: #ddd; border-radius: 20px; height: 30px; margin: 20px 0; overflow: hidden; }
-        .progress-fill { background: #28a745; height: 100%; width: 0%; transition: width 1s; }
+        .progress-bar { background: #ddd; border-radius: 20px; height: 35px; margin: 20px 0; overflow: hidden; border: 1px solid #ccc; }
+        .progress-fill { background: #28a745; height: 100%; width: 0%; transition: width 1.5s ease-in-out; }
         .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
-        .card { padding: 15px; background: #e9ecef; border-radius: 8px; border-left: 5px solid #007bff; }
-        #status { font-weight: bold; font-size: 1.2em; }
+        .card { padding: 15px; background: #f8f9fa; border-radius: 8px; border-left: 5px solid #007bff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        #status { font-weight: bold; font-size: 1.3em; margin-top: 20px; }
     </style>
 </head>
 <body>
@@ -23,13 +23,14 @@
 <div class="container">
     <h1>🏗️ OmniSite Live Progress</h1>
     <div class="progress-bar"><div class="progress-fill" id="fill"></div></div>
-    <h2 id="perc">Loading...</h2>
+    <h2 id="perc">Connecting to Site...</h2>
 
     <div class="stats">
-        <div class="card"><strong>Planned:</strong> <br> <span id="plan">--</span></div>
-        <div class="card"><strong>Actual:</strong> <br> <span id="act">--</span></div>
+        <div class="card"><strong>BIM Planned Target:</strong> <br> <span id="plan">--</span></div>
+        <div class="card"><strong>Actual Progress:</strong> <br> <span id="act">--</span></div>
     </div>
-    <p id="status">Syncing with Site AI...</p>
+    
+    <p id="status" style="color: orange;">Checking for Site AI Updates...</p>
     
     <div style="height: 300px; margin-top: 20px;">
         <canvas id="myChart"></canvas>
@@ -37,35 +38,43 @@
 </div>
 
 <script>
-    // 1. Paste YOUR Firebase URL below
+    // 1. Unga Firebase URL-ah inga mattum paste pannunga
+    // IMPORTANT: Kadisiyila .json panna koodadhu
     const firebaseConfig = {
-        databaseURL: "https://console.firebase.google.com/u/0/project/omniar-db/database/omniar-db-default-rtdb/data/~2F" 
+        databaseURL: "https://omniar-db-8ab03-default-rtdb.firebaseio.com/" 
     };
 
+    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+    const database = firebase.database();
     
     // Chart Setup
     const ctx = document.getElementById('myChart').getContext('2d');
     let myChart = new Chart(ctx, {
         type: 'bar',
-        data: { labels: ['Planned', 'Actual'], datasets: [{ label: '% Progress', data: [100, 0], backgroundColor: ['#007bff', '#28a745'] }] },
-        options: { responsive: true, maintainAspectRatio: false }
+        data: { labels: ['Planned Target', 'Actual Progress'], datasets: [{ label: '% Done', data: [100, 0], backgroundColor: ['#007bff', '#28a745'] }] },
+        options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100 } } }
     });
 
-    // 2. Real-time Listener (AI result vandha udane dashboard maarum)
-    db.ref('construction_progress').on('value', (snap) => {
-        const data = snap.val();
+    // 2. Data Listener (Firebase-la data irundha udane dashboard-ah mathum)
+    database.ref('construction_progress').on('value', (snapshot) => {
+        const data = snapshot.val();
+        console.log("Data received from Firebase:", data); // Check in Console (F12)
+        
         if(data) {
-            document.getElementById('fill').style.width = data.percentage + '%';
-            document.getElementById('perc').innerText = data.percentage + '% Completed';
-            document.getElementById('plan').innerText = data.planned_days + ' Days';
-            document.getElementById('act').innerText = data.actual_days + ' Days';
-            document.getElementById('status').innerText = "Status: " + data.delay_msg;
-            document.getElementById('status').style.color = data.percentage < 100 ? "red" : "green";
+            const percentage = data.percentage || 0;
+            document.getElementById('fill').style.width = percentage + '%';
+            document.getElementById('perc').innerText = percentage + '% Completed';
+            document.getElementById('plan').innerText = (data.planned_days || '--') + ' Days';
+            document.getElementById('act').innerText = (data.actual_days || '--') + ' Days';
+            document.getElementById('status').innerText = "Status: " + (data.delay_msg || 'Syncing...');
+            document.getElementById('status').style.color = percentage < 100 ? "#dc3545" : "#28a745";
             
-            myChart.data.datasets[0].data = [100, data.percentage];
+            // Update Bar Chart
+            myChart.data.datasets[0].data = [100, percentage];
             myChart.update();
+        } else {
+            document.getElementById('perc').innerText = "Waiting for AI Data...";
         }
     });
 </script>
