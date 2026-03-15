@@ -3,43 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OmniSite AR - Professional Dashboard</title>
-    <!-- Professional Fonts & Libraries -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <title>OmniSite AR - HD Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
-        body { font-family: 'Inter', sans-serif; background: #f0f2f5; padding: 30px; color: #1c1e21; }
-        .container { max-width: 900px; margin: auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 8px solid #007bff; }
-        h1 { font-size: 2.2em; margin-bottom: 10px; color: #007bff; }
-        .progress-bar { background: #e4e6eb; border-radius: 30px; height: 45px; margin: 30px 0; overflow: hidden; border: 1px solid #ddd; }
-        .progress-fill { background: linear-gradient(90deg, #28a745, #34ce57); height: 100%; width: 0%; transition: width 2s ease-in-out; }
-        .percentage-text { font-size: 2em; font-weight: bold; margin-bottom: 20px; }
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 30px; }
-        .card { padding: 25px; background: #ffffff; border-radius: 15px; border: 1px solid #e4e6eb; box-shadow: 0 4px 10px rgba(0,0,0,0.03); border-bottom: 5px solid #007bff; }
-        .card strong { font-size: 1.1em; color: #65676b; text-transform: uppercase; }
-        .card span { font-size: 1.8em; font-weight: bold; display: block; margin-top: 10px; }
-        #status-msg { font-size: 1.5em; font-weight: bold; margin-top: 30px; padding: 15px; border-radius: 10px; display: inline-block; }
-        .chart-box { margin-top: 40px; background: #fff; padding: 20px; border-radius: 15px; height: 400px; }
+        body { font-family: 'Inter', sans-serif; background: #f0f2f5; padding: 20px; text-align: center; }
+        .container { max-width: 950px; margin: auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); border-top: 10px solid #007bff; }
+        h1 { font-size: 2.5em; color: #007bff; margin-bottom: 5px; }
+        .progress-bar { background: #eee; border-radius: 30px; height: 50px; margin: 30px 0; overflow: hidden; border: 2px solid #ddd; }
+        .progress-fill { background: linear-gradient(90deg, #28a745, #34ce57); height: 100%; width: 0%; transition: width 2s ease; }
+        .percentage-text { font-size: 2.5em; font-weight: bold; color: #333; margin-bottom: 20px; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+        .card { padding: 25px; background: #f8f9fa; border-radius: 15px; border: 2px solid #e4e6eb; }
+        .card strong { font-size: 1.2em; color: #555; }
+        .card span { font-size: 2.2em; font-weight: bold; display: block; color: #007bff; }
+        #status-msg { font-size: 1.8em; font-weight: bold; margin-top: 30px; padding: 20px; border-radius: 12px; display: block; border: 3px solid #dc3545; }
+        .chart-box { margin-top: 50px; height: 500px; background: #fff; padding: 20px; border-radius: 15px; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h1>🏗️ OmniSite Live Analysis</h1>
-    <p>BIM Strategy vs Real-Time Site Execution</p>
-    
     <div class="progress-bar"><div class="progress-fill" id="fill"></div></div>
-    <div class="percentage-text" id="perc_display">Syncing...</div>
+    <div class="percentage-text" id="perc_display">0% COMPLETED</div>
 
     <div class="stats-grid">
-        <div class="card"><strong>Planned Target</strong><span id="plan_days">-- Days</span></div>
-        <div class="card"><strong>Actual Progress</strong><span id="act_days">-- Days</span></div>
+        <div class="card"><strong>BIM Target</strong><span id="plan_days">-- Days</span></div>
+        <div class="card"><strong>Site Progress</strong><span id="act_days">-- Days</span></div>
     </div>
     
-    <div id="status-msg">Connecting to Site AI...</div>
+    <div id="status-msg">WAITING FOR AI...</div>
     
     <div class="chart-box">
         <canvas id="hdChart"></canvas>
@@ -47,36 +44,38 @@
 </div>
 
 <script>
-    // 1. Paste YOUR Firebase URL below
+    // --- 1. Unga Firebase URL-ah inga paste pannunga ---
     const firebaseConfig = { databaseURL: "https://console.firebase.google.com/u/0/project/omniar-db-8ab03/database/omniar-db-8ab03-default-rtdb/data/~2F" };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     
-    // HD Chart Setup
+    // --- 2. HD Chart Config (Label sizes increased for clarity) ---
     const ctx = document.getElementById('hdChart').getContext('2d');
     let hdChart = new Chart(ctx, {
         type: 'bar',
         data: { 
-            labels: ['Planned Plan (100%)', 'Actual Site Progress'], 
+            labels: ['PLANNED (100%)', 'ACTUAL PROGRESS'], 
             datasets: [{ 
                 label: 'Completion %', 
                 data: [100, 0], 
                 backgroundColor: ['#007bff', '#28a745'],
-                borderRadius: 10
+                barThickness: 120 // Bars-ah innum gundaa (thick) aaki irukaen
             }] 
         },
         options: { 
             responsive: true, 
             maintainAspectRatio: false,
-            plugins: { legend: { labels: { font: { size: 16, weight: 'bold' } } } },
+            plugins: { 
+                legend: { labels: { font: { size: 22, weight: 'bold' } } } // Top Legend perusaakum
+            },
             scales: { 
-                y: { beginAtZero: true, max: 100, ticks: { font: { size: 14 } } },
-                x: { ticks: { font: { size: 16, weight: 'bold' } } }
+                y: { beginAtZero: true, max: 100, ticks: { font: { size: 20, weight: 'bold' } } }, // Y-Axis perusaakum
+                x: { ticks: { font: { size: 22, weight: 'bold' }, color: '#000' } } // X-Axis (Planned/Actual) romba clear-ah theriyum
             }
         }
     });
 
-    // 2. Real-time Listener
+    // --- 3. Real-time Logic ---
     db.ref('construction_progress').on('value', (snap) => {
         const data = snap.val();
         if(data) {
@@ -87,9 +86,9 @@
             document.getElementById('act_days').innerText = (data.actual_days || 0) + ' Days';
             
             const msg = document.getElementById('status-msg');
-            msg.innerText = "PROJECT STATUS: " + (data.delay_msg || 'UPDATING...');
-            msg.style.background = p < 100 ? "#fff0f0" : "#f0fff4";
+            msg.innerText = "STATUS: " + (data.delay_msg || 'SYNCING...');
             msg.style.color = p < 100 ? "#dc3545" : "#28a745";
+            msg.style.borderColor = p < 100 ? "#dc3545" : "#28a745";
             
             hdChart.data.datasets[0].data = [100, p];
             hdChart.update();
