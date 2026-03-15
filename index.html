@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OmniSite AR - Smart Construction Hub</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f0f2f5; color: #333; text-align: center; }
+        header { background: #007bff; color: white; padding: 40px 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .logo { max-width: 250px; margin-bottom: 15px; border-radius: 10px; }
+        .container { max-width: 1000px; margin: 40px auto; padding: 20px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 30px; }
+        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: 0.3s; cursor: pointer; text-decoration: none; color: inherit; }
+        .card:hover { transform: translateY(-10px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+        .card h2 { color: #007bff; }
+        .btn { display: inline-block; padding: 12px 25px; background: #007bff; color: white; border-radius: 25px; text-decoration: none; margin-top: 15px; font-weight: bold; }
+        .qr-section { margin-top: 50px; background: white; padding: 30px; border-radius: 15px; }
+        footer { margin-top: 50px; padding: 20px; font-size: 0.9em; color: #777; }
+    </style>
+</head>
+<body>
+
+<header>
+    <!-- Inga unga logo image URL-ah kudukalam -->
+    <h1>OmniSite AR PLATFORM</h1>
+    <p>Hybrid BIM Tracking | AI Progress Analysis | WebAR Visualization</p>
+</header>
+
+<div class="container">
+    <h2>Select Your Portal</h2>
+    
+    <div class="grid">
+        <!-- Card 1: Worker Portal -->
+        <a href="ar_view.html" class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/3248/3248166.png" width="80" alt="AR">
+            <h2>Worker Portal</h2>
+            <p>On-site AR X-Ray vision for pipelines and electrical wiring. No-app required.</p>
+            <span class="btn">Launch AR View</span>
+        </a>
+
+        <!-- Card 2: Management Dashboard -->
+        <a href="dashboard.html" class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/1162/1162456.png" width="80" alt="Dashboard">
+            <h2>Consumer Dashboard</h2>
+            <p>Planned vs Actual progress analytics, AI reports, and project status.</p>
+            <span class="btn">Open Dashboard</span>
+        </a>
+    </div>
+
+    <div class="qr-section">
+        <h2>Site Access Point</h2>
+        <p>Scan the project QR code on-site to automatically link the BIM model to real-world coordinates.</p>
+        <!-- Inga unga Step 3-la panna QR code image-ah upload panni link panna nalla irukum -->
+        <div style="padding: 20px; border: 2px dashed #007bff; display: inline-block; border-radius: 10px;">
+             <strong>[ PLACE PROJECT QR HERE ]</strong>
+        </div>
+    </div>
+</div>
+
+<footer>
+    &copy; 2025 OmniSite AR - Low Cost Hybrid BIM Solution for Construction
+</footer>
+
+</body>
+</html>
