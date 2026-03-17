@@ -28,6 +28,10 @@
         <h3 id="status" style="margin-top:20px; color:#3b82f6;">🔄 Syncing with Site AI...</h3>
         <div style="height: 400px; margin-top: 20px;"><canvas id="v2Chart"></canvas></div>
     </div>
+    <div class="card" style="border-bottom: 5px solid #ff9800;">
+    <strong>AI Predicted Finish</strong>
+    <span id="predicted_date" style="color: #ff9800;">Calculating...</span>
+</div>
     <script>
         const firebaseConfig = { databaseURL: "https://omniar-db-8ab03-default-rtdb.firebaseio.com/" };
         firebase.initializeApp(firebaseConfig);
