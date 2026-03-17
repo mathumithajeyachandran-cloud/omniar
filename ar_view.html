@@ -4,22 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OmniBuild 5D - Worker Portal</title>
+    <!-- Google Model Viewer Library -->
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
         body { margin: 0; background: #000; color: white; font-family: sans-serif; }
         model-viewer { width: 100%; height: 80vh; }
         .instruction-box { padding: 15px; background: #222; border-top: 4px solid #007bff; text-align: center; }
-        .error-btn { background: #dc3545; color: white; padding: 10px; border-radius: 5px; border: none; margin-top: 10px; font-weight: bold; }
+        .error-btn { background: #dc3545; color: white; padding: 10px; border-radius: 5px; border: none; margin-top: 10px; font-weight: bold; cursor: pointer; }
         .success-tag { color: #28a745; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <!-- 5D BIM Model Viewer -->
+    <!-- 5D BIM Model Viewer (Updated to Pro Model) -->
     <model-viewer 
-        src="construction_model.glb" 
+        src="omnibuild.glb" 
         ar ar-modes="webxr scene-viewer quick-look" 
-        camera-controls shadow-intensity="1"
+        camera-controls shadow-intensity="1" 
         exposure="1.2">
         
         <button slot="ar-button" style="background: #007bff; color: white; border-radius: 8px; border: none; position: absolute; bottom: 20px; right: 20px; padding: 12px 20px;">
@@ -30,8 +31,8 @@
     <div class="instruction-box">
         <strong>STEP 1:</strong> Scan QR Code to align model.<br>
         <strong>STEP 2:</strong> Check <span style="color: #ffff00;">Yellow Wires</span> & <span style="color: #007bff;">Blue Pipes</span>.<br>
-        <p id="audit-text">Status: <span class="success-tag">BIM DATA SYNCED</span></p>
-        
+        <p id="audit-text">Status: <span class="success-tag">BIM DATA SYNCED (5D PRO ACTIVE)</span></p>
+
         <!-- Error Solving Feature -->
         <button class="error-btn" onclick="alert('ERROR LOGGED: Alignment Mismatch reported to Manager.')">
             REPORT ALIGNMENT ERROR
