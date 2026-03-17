@@ -3,40 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OmniBuild 5D - Smart Construction Hub</title>
+    <title>OmniBuild 5D App</title>
+    <!-- App Settings -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    
     <style>
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #0f172a; color: white; text-align: center; }
-        header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); padding: 60px 20px; border-bottom: 3px solid #3b82f6; }
-        h1 { font-size: 3em; margin: 0; letter-spacing: 2px; color: #3b82f6; }
-        p { color: #94a3b8; font-size: 1.1em; }
-        .container { max-width: 1000px; margin: 50px auto; padding: 20px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-        .card { background: #1e293b; padding: 40px; border-radius: 20px; border: 1px solid #334155; transition: 0.4s; cursor: pointer; text-decoration: none; color: inherit; display: block; }
-        .card:hover { transform: translateY(-15px); border-color: #3b82f6; box-shadow: 0 10px 30px rgba(59,130,246,0.2); }
-        .card h2 { color: #3b82f6; }
-        .btn { display: inline-block; margin-top: 25px; padding: 12px 30px; background: #3b82f6; color: white; border-radius: 30px; font-weight: bold; }
-        footer { margin-top: 100px; padding: 30px; color: #64748b; font-size: 0.85em; }
+        body { font-family: sans-serif; margin: 0; background: #0f172a; color: white; }
+        header { background: #1e293b; padding: 20px; text-align: center; border-bottom: 2px solid #3b82f6; }
+        
+        /* App Content Area */
+        .app-view { padding: 20px; padding-bottom: 100px; text-align: center; }
+        .feature-card { background: #1e293b; padding: 25px; border-radius: 20px; margin-bottom: 20px; border: 1px solid #334155; text-decoration: none; color: white; display: block; }
+        
+        /* Bottom Mobile Navigation */
+        .bottom-nav {
+            position: fixed; bottom: 0; width: 100%; height: 75px;
+            background: #1e293b; display: flex; justify-content: space-around;
+            align-items: center; border-top: 1px solid #334155; z-index: 1000;
+        }
+        .nav-item { color: #94a3b8; text-decoration: none; text-align: center; font-size: 0.8em; }
+        .nav-item.active { color: #3b82f6; font-weight: bold; }
+        .nav-icon { font-size: 24px; display: block; margin-bottom: 5px; }
     </style>
 </head>
 <body>
-    <header>
-        <h1>OMNIBUILD 5D</h1>
-        <p>Hybrid BIM Platform | AI Progress Tracking | WebAR Vision</p>
-    </header>
-    <div class="container">
-        <div class="grid">
-            <a href="ar_view.html" class="card">
-                <h2>Worker Portal</h2>
-                <p>On-site X-Ray vision for hidden utility pipelines using WebAR.</p>
-                <span class="btn">Launch AR Audit</span>
-            </a>
-            <a href="dashboard.html" class="card">
-                <h2>Project Dashboard</h2>
-                <p>Real-time "Planned vs Actual" progress and cost analytics.</p>
-                <span class="btn">Open HD Dashboard</span>
-            </a>
+
+    <header><h1>OMNIBUILD 5D</h1></header>
+
+    <div class="app-view">
+        <div class="feature-card">
+            <h2>Welcome, Site Admin</h2>
+            <p>BIM 5D Tracking System is Active</p>
         </div>
+
+        <a href="ar_view.html" class="feature-card">
+            <span style="font-size: 40px;">🔍</span>
+            <h3>Field Worker AR</h3>
+            <p>Launch X-Ray Vision Portals</p>
+        </a>
+
+        <a href="dashboard.html" class="feature-card">
+            <span style="font-size: 40px;">📊</span>
+            <h3>Analytics Dashboard</h3>
+            <p>Planned vs Actual Reports</p>
+        </a>
     </div>
-    <footer>© 2025 OmniBuild 5D System</footer>
+
+    <!-- App Navigation Menu -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item active"><span class="nav-icon">🏠</span>Home</a>
+        <a href="ar_view.html" class="nav-item"><span class="nav-icon">🛡️</span>AR View</a>
+        <a href="dashboard.html" class="nav-item"><span class="nav-icon">📉</span>Reports</a>
+    </nav>
+
 </body>
 </html>
