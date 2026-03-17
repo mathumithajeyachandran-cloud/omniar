@@ -1,29 +1,102 @@
-<!-- Dashboard UI-la indha pudhu section-ah add pannunga (Buttons-ku kila) -->
-<div class="card" style="margin-top:20px; border: 2px dashed #3b82f6; background: #f0f7ff;">
-    <strong>📸 SITE AI AUDIT</strong>
-    <p style="font-size: 0.8em; color: #64748b;">Upload Site Video for Automatic Prediction</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OmniBuild 5D - Advanced AI Dashboard</title>
+    <!-- Fonts & Firebase Libraries -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
-    <input type="file" id="videoUpload" accept="video/*" style="display: none;">
-    <button onclick="document.getElementById('videoUpload').click()" 
-            style="background: #3b82f6; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: bold; cursor: pointer;">
-        UPLOAD & SYNC
-    </button>
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #f0f2f5; padding: 20px; text-align: center; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); border-top: 10px solid #3b82f6; }
+        
+        /* THE H1 TAG IS HERE */
+        h1 { font-size: 2.2em; color: #3b82f6; margin-bottom: 5px; }
+        
+        .progress-bar { background: #eee; border-radius: 30px; height: 40px; margin: 25px 0; overflow: hidden; }
+        .progress-fill { background: linear-gradient(90deg, #28a745, #34ce57); height: 100%; width: 0%; transition: width 2s ease; }
+        
+        /* Audit Card Section */
+        .audit-card { margin: 20px 0; border: 2px dashed #3b82f6; background: #f0f7ff; padding: 20px; border-radius: 15px; }
+        .upload-btn { background: #3b82f6; color: white; border: none; padding: 12px 25px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 25px; }
+        .card { padding: 15px; background: #f8f9fa; border-radius: 12px; border-bottom: 5px solid #3b82f6; }
+        .card strong { font-size: 0.8em; color: #555; }
+        .card span { font-size: 1.2em; font-weight: bold; display: block; margin-top: 5px; color: #3b82f6; }
+        
+        .chart-box { margin-top: 40px; height: 400px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- MASTER TITLE (h1) -->
+    <h1>🏗️ OmniBuild 5D : AI Dashboard</h1>
+    <p>Automated Site Audit & Predictive Progress Tracking</p>
+
+    <!-- NEW: UPLOAD SECTION -->
+    <div class="audit-card">
+        <strong>📸 SITE AI AUDIT</strong>
+        <p style="font-size: 0.8em; color: #64748b;">Upload Video for Automatic Progress Prediction</p>
+        <input type="file" id="videoUpload" accept="video/*" style="display: none;">
+        <button class="upload-btn" onclick="document.getElementById('videoUpload').click()">SELECT VIDEO & SYNC</button>
+        <p id="uploadStatus" style="font-size: 0.8em; margin-top: 10px; color: #059669; font-weight: bold; display: none;">⏳ AI Analyzing... Please wait.</p>
+    </div>
     
-    <p id="uploadStatus" style="font-size: 0.8em; margin-top: 10px; color: #059669; font-weight: bold; display: none;">
-        ⏳ AI Analyzing... Please wait.
-    </p>
+    <div class="progress-bar"><div class="progress-fill" id="fill"></div></div>
+    <div style="font-size: 1.5em; font-weight: bold;" id="perc_display">0% Completed</div>
+
+    <div class="stats-grid">
+        <div class="card"><strong>Planned Target</strong><span id="plan">-- Days</span></div>
+        <div class="card"><strong>Actual Progress</strong><span id="act">-- Days</span></div>
+        <div class="card" style="border-color: #ff9800;"><strong>AI Finish Date</strong><span id="eta" style="color:#ff9800;">Calculating...</span></div>
+    </div>
+    
+    <div class="chart-box">
+        <canvas id="finalChart"></canvas>
+    </div>
 </div>
 
 <script>
-    // Upload Logic (Simulation for Prototype)
+    // 1. Unga Firebase URL-ah inga paste pannunga
+    const firebaseConfig = { databaseURL: "https://omniar-db-8ab03-default-rtdb.firebaseio.com/" };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    
+    // Chart Setup
+    const ctx = document.getElementById('finalChart').getContext('2d');
+    let finalChart = new Chart(ctx, {
+        type: 'bar',
+        data: { labels: ['Planned', 'Actual'], datasets: [{ label: '% Done', data: [100, 0], backgroundColor: ['#3b82f6', '#28a745'] }] },
+        options: { responsive: true, maintainAspectRatio: false }
+    });
+
+    // 2. Data Listener (Firebase updates dashboard)
+    db.ref('construction_progress').on('value', (snap) => {
+        const d = snap.val();
+        if(d) {
+            document.getElementById('fill').style.width = d.percentage + '%';
+            document.getElementById('perc_display').innerText = d.percentage + '% COMPLETED';
+            document.getElementById('plan').innerText = d.planned_days + ' Days';
+            document.getElementById('act').innerText = d.actual_days + ' Days';
+            document.getElementById('eta').innerText = d.predicted_date || 'TBD';
+            finalChart.data.datasets[0].data = [100, d.percentage];
+            finalChart.update();
+        }
+    });
+
+    // 3. Upload Trigger Logic
     document.getElementById('videoUpload').onchange = function() {
         document.getElementById('uploadStatus').style.display = 'block';
-        // Logic: Real-time-la idhu server-ku video-va anuppum
-        // Demo-kaaga namma Firebase-la "Start_AI" trigger-ah update pandrom
+        // AI Trigger anupuroam
         db.ref('ai_trigger').set({ status: "start", timestamp: Date.now() });
-        
-        setTimeout(() => {
-            alert("AI Analysis Started in Cloud. Dashboard will update in 10 seconds!");
-        }, 1000);
+        alert("Video received! AI analysis started in cloud.");
     };
 </script>
+</body>
+</html>
