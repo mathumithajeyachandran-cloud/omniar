@@ -3,90 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OmniBuild 5D - Predictive Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap" rel="stylesheet">
+    <title>OmniBuild 5D - Analytics Dashboard</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
     <style>
-        body { font-family: 'Inter', sans-serif; background: #f0f2f5; padding: 20px; text-align: center; }
-        .container { max-width: 950px; margin: auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); border-top: 10px solid #3b82f6; }
-        .progress-bar { background: #eee; border-radius: 30px; height: 50px; margin: 30px 0; overflow: hidden; }
-        .progress-fill { background: linear-gradient(90deg, #28a745, #34ce57); height: 100%; width: 0%; transition: width 2s ease; }
-        .percentage-text { font-size: 2.5em; font-weight: bold; }
-        
-        /* Prediction Card Styling */
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 20px; }
-        .card { padding: 20px; background: #f8f9fa; border-radius: 15px; border: 2px solid #e4e6eb; }
-        .card strong { font-size: 0.9em; color: #555; }
-        .card span { font-size: 1.5em; font-weight: bold; display: block; margin-top: 5px; color: #007bff; }
-        
-        /* Prediction Box Color */
-        .predict-card { border-bottom: 5px solid #ff9800 !important; }
-        .predict-card span { color: #ff9800 !important; }
-
-        #status-msg { font-size: 1.4em; font-weight: bold; margin-top: 30px; padding: 15px; border-radius: 12px; display: block; border: 2px solid #3b82f6; }
-        .chart-box { margin-top: 40px; height: 400px; background: #fff; padding: 20px; border-radius: 15px; }
+        body { font-family: sans-serif; background: #f4f7f6; padding: 20px; text-align: center; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        .progress-bar { background: #eee; border-radius: 25px; height: 40px; margin: 20px 0; overflow: hidden; }
+        .progress-fill { background: #28a745; height: 100%; width: 0%; transition: width 1.5s; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .card { padding: 20px; background: #f8f9fa; border-radius: 12px; border-bottom: 5px solid #007bff; }
+        .predict-card { border-bottom: 5px solid #ff9800; color: #ff9800; }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <h1>🏗️ OmniBuild 5D AI Analytics</h1>
-    <div class="progress-bar"><div class="progress-fill" id="fill"></div></div>
-    <div class="percentage-text" id="perc_display">0% COMPLETED</div>
-
-    <div class="stats-grid">
-        <div class="card"><strong>Planned Target</strong><span id="plan_days">-- Days</span></div>
-        <div class="card"><strong>Actual Days</strong><span id="act_days">-- Days</span></div>
-        <!-- Ippo pudhusa sethurukura Prediction Box -->
-        <div class="card predict-card"><strong>AI Predicted Finish</strong><span id="predicted_date">Calculating...</span></div>
+    <div class="container">
+        <h1>🏗️ OmniBuild 5D Live Analysis</h1>
+        <div class="progress-bar"><div class="progress-fill" id="fill"></div></div>
+        <h2 id="perc">0% Completed</h2>
+        <div class="grid">
+            <div class="card"><strong>Planned Target</strong><br><span id="plan">-- Days</span></div>
+            <div class="card"><strong>Actual Progress</strong><br><span id="act">-- Days</span></div>
+            <div class="card predict-card"><strong>AI Predicted Finish</strong><br><span id="eta">Calculating...</span></div>
+        </div>
+        <div style="height: 350px; margin-top: 30px;"><canvas id="chart"></canvas></div>
     </div>
-    
-    <div id="status-msg">SYNCING SITE AI...</div>
-    
-    <div class="chart-box">
-        <canvas id="hdChart"></canvas>
-    </div>
-</div>
+    <script>
+        const firebaseConfig = { databaseURL: "https://omniar-db-8ab03-default-rtdb.firebaseio.com/" };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        const ctx = document.getElementById('chart').getContext('2d');
+        let myChart = new Chart(ctx, { type: 'bar', data: { labels: ['Planned', 'Actual'], datasets: [{ label: '% Done', data: [100, 0], backgroundColor: ['#007bff', '#28a745'] }] }, options: { responsive: true, maintainAspectRatio: false } });
 
-<script>
-    // --- 1. Firebase URL Update ---
-    const firebaseConfig = { databaseURL: "https://omniar-db-8ab03-default-rtdb.firebaseio.com/" };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-    
-    // HD Chart Setup
-    const ctx = document.getElementById('hdChart').getContext('2d');
-    let hdChart = new Chart(ctx, {
-        type: 'bar',
-        data: { labels: ['PLANNED (100%)', 'ACTUAL PROGRESS'], datasets: [{ label: '% Completion', data: [100, 0], backgroundColor: ['#007bff', '#28a745'] }] },
-        options: { responsive: true, maintainAspectRatio: false }
-    });
-
-    // --- 2. Real-time Prediction Data Fetching ---
-    db.ref('construction_progress').on('value', (snap) => {
-        const data = snap.val();
-        if(data) {
-            const p = data.percentage || 0;
-            document.getElementById('fill').style.width = p + '%';
-            document.getElementById('perc_display').innerText = p + '% COMPLETED';
-            document.getElementById('plan_days').innerText = (data.planned_days || 0) + ' Days';
-            document.getElementById('act_days').innerText = (data.actual_days || 0) + ' Days';
-            
-            // Prediction Value Display Logic
-            document.getElementById('predicted_date').innerText = data.predicted_date || 'N/A';
-            
-            const msg = document.getElementById('status-msg');
-            msg.innerText = "STATUS: " + (data.delay_msg || 'UPDATING...');
-            msg.style.color = p < 100 ? "#dc3545" : "#28a745";
-            msg.style.borderColor = p < 100 ? "#dc3545" : "#28a745";
-            
-            hdChart.data.datasets[0].data = [100, p];
-            hdChart.update();
-        }
-    });
-</script>
+        db.ref('construction_progress').on('value', (snap) => {
+            const d = snap.val();
+            if(d) {
+                document.getElementById('fill').style.width = d.percentage + '%';
+                document.getElementById('perc').innerText = d.percentage + '%';
+                document.getElementById('plan').innerText = d.planned_days + ' Days';
+                document.getElementById('act').innerText = d.actual_days + ' Days';
+                document.getElementById('eta').innerText = d.predicted_date;
+                myChart.data.datasets[0].data = [100, d.percentage];
+                myChart.update();
+            }
+        });
+    </script>
 </body>
 </html>
