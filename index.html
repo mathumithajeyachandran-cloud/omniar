@@ -3,95 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OmniBuild 5D v2 - Smart Construction Platform</title>
-    <!-- Professional Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <title>OmniBuild 5D - Smart Construction Hub</title>
     <style>
-        body { font-family: 'Inter', sans-serif; margin: 0; background: #0f172a; color: white; text-align: center; }
-        
-        /* Hero Section */
-        header { 
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); 
-            padding: 60px 20px; border-bottom: 3px solid #3b82f6; 
-        }
-        h1 { font-size: 2.8em; margin: 0; letter-spacing: 2px; color: #3b82f6; }
-        p { color: #94a3b8; font-size: 1.1em; margin-top: 10px; }
-
-        /* Portal Cards */
-        .container { max-width: 1000px; margin: 50px auto; padding: 0 20px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-        
-        .card { 
-            background: #1e293b; padding: 40px; border-radius: 20px; 
-            border: 1px solid #334155; transition: 0.4s; cursor: pointer;
-            text-decoration: none; color: inherit; display: block;
-        }
-        .card:hover { 
-            transform: translateY(-15px); border-color: #3b82f6; 
-            box-shadow: 0 10px 30px rgba(59,130,246,0.2); 
-        }
-        .card h2 { color: #3b82f6; margin-bottom: 15px; }
-        .card p { font-size: 0.95em; line-height: 1.6; }
-        
-        .icon { font-size: 50px; margin-bottom: 20px; display: block; }
-        
-        .btn { 
-            display: inline-block; margin-top: 25px; padding: 12px 30px; 
-            background: #3b82f6; color: white; border-radius: 30px; 
-            font-weight: bold; text-transform: uppercase; font-size: 0.9em;
-        }
-
-        /* Project Specs Section */
-        .specs { margin-top: 60px; background: #111827; padding: 30px; border-radius: 15px; border-left: 5px solid #3b82f6; }
-        .specs-grid { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px; margin-top: 20px; }
-        .spec-item { text-align: center; }
-        .spec-item strong { display: block; font-size: 1.5em; color: #3b82f6; }
-        
-        footer { margin-top: 100px; padding: 30px; color: #64748b; font-size: 0.85em; border-top: 1px solid #334155; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #0f172a; color: white; text-align: center; }
+        header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); padding: 60px 20px; border-bottom: 3px solid #3b82f6; }
+        h1 { font-size: 3em; margin: 0; letter-spacing: 2px; color: #3b82f6; }
+        p { color: #94a3b8; font-size: 1.1em; }
+        .container { max-width: 1000px; margin: 50px auto; padding: 20px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .card { background: #1e293b; padding: 40px; border-radius: 20px; border: 1px solid #334155; transition: 0.4s; cursor: pointer; text-decoration: none; color: inherit; display: block; }
+        .card:hover { transform: translateY(-15px); border-color: #3b82f6; box-shadow: 0 10px 30px rgba(59,130,246,0.2); }
+        .card h2 { color: #3b82f6; }
+        .btn { display: inline-block; margin-top: 25px; padding: 12px 30px; background: #3b82f6; color: white; border-radius: 30px; font-weight: bold; }
+        footer { margin-top: 100px; padding: 30px; color: #64748b; font-size: 0.85em; }
     </style>
 </head>
 <body>
-
-<header>
-    <h1>OMNIBUILD 5D <span style="color:white">v2</span></h1>
-    <p>Hybrid BIM Tracking | AI Progress Analysis | WebAR Visualization</p>
-</header>
-
-<div class="container">
-    <div class="grid">
-        <!-- Portal 1: Worker (AR) -->
-        <a href="ar_view.html" class="card">
-            <span class="icon">🔍</span>
-            <h2>Field Worker Portal</h2>
-            <p>Access 5D BIM models on-site. Visualize hidden utility pipelines and electrical lines using X-Ray AR Vision.</p>
-            <span class="btn">Launch AR Audit</span>
-        </a>
-
-        <!-- Portal 2: Management (Dashboard) -->
-        <a href="dashboard.html" class="card">
-            <span class="icon">📊</span>
-            <h2>Project Dashboard</h2>
-            <p>Real-time "Planned vs Actual" analytics. Monitor site progress via AI Computer Vision and Firebase sync.</p>
-            <span class="btn">Open Executive View</span>
-        </a>
-    </div>
-
-    <!-- Quick Info Panel -->
-    <div class="specs">
-        <h3>Platform Architecture Status</h3>
-        <div class="specs-grid">
-            <div class="spec-item"><strong>3D/4D/5D</strong> BIM Ready</div>
-            <div class="spec-item"><strong>YOLOv8</strong> AI Active</div>
-            <div class="spec-item"><strong>WebXR</strong> AR Stable</div>
-            <div class="spec-item"><strong>Firebase</strong> Live Sync</div>
+    <header>
+        <h1>OMNIBUILD 5D</h1>
+        <p>Hybrid BIM Platform | AI Progress Tracking | WebAR Vision</p>
+    </header>
+    <div class="container">
+        <div class="grid">
+            <a href="ar_view.html" class="card">
+                <h2>Worker Portal</h2>
+                <p>On-site X-Ray vision for hidden utility pipelines using WebAR.</p>
+                <span class="btn">Launch AR Audit</span>
+            </a>
+            <a href="dashboard.html" class="card">
+                <h2>Project Dashboard</h2>
+                <p>Real-time "Planned vs Actual" progress and cost analytics.</p>
+                <span class="btn">Open HD Dashboard</span>
+            </a>
         </div>
     </div>
-</div>
-
-<footer>
-    &copy; 2025 OmniBuild 5D - Advanced Construction Management Ecosystem. <br>
-    Frugal Engineering | Open-Source BIM Standards
-</footer>
-
+    <footer>© 2025 OmniBuild 5D System</footer>
 </body>
 </html>
