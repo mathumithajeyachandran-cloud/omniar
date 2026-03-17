@@ -3,36 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OmniSite AR - X-Ray Analysis</title>
+    <title>OmniBuild 5D - Worker Portal</title>
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
-        body { margin: 0; background-color: #1a1a1a; color: white; font-family: sans-serif; }
-        model-viewer { width: 100%; height: 85vh; --poster-color: transparent; }
-        .dashboard { padding: 15px; background: #222; border-top: 3px solid #007bff; }
-        .status-tag { color: #00ff00; font-weight: bold; }
+        body { margin: 0; background: #000; color: white; font-family: sans-serif; }
+        model-viewer { width: 100%; height: 80vh; }
+        .instruction-box { padding: 15px; background: #222; border-top: 4px solid #007bff; text-align: center; }
+        .error-btn { background: #dc3545; color: white; padding: 10px; border-radius: 5px; border: none; margin-top: 10px; font-weight: bold; }
+        .success-tag { color: #28a745; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <!-- src-ல உங்க ஃபைல் நேம் கரெக்டா இருக்கானு பாத்துக்கோங்க -->
+    <!-- 5D BIM Model Viewer -->
     <model-viewer 
         src="construction_model.glb" 
-        ar 
-        ar-modes="webxr scene-viewer quick-look" 
-        camera-controls 
-        environment-image="neutral"
-        exposure="1.2"
-        shadow-intensity="1">
+        ar ar-modes="webxr scene-viewer quick-look" 
+        camera-controls shadow-intensity="1"
+        exposure="1.2">
         
         <button slot="ar-button" style="background: #007bff; color: white; border-radius: 8px; border: none; position: absolute; bottom: 20px; right: 20px; padding: 12px 20px;">
-            🚀 START X-RAY AR
+            🔍 START X-RAY AUDIT
         </button>
-
     </model-viewer>
 
-    <div class="dashboard">
-        <strong>Project Status:</strong> <span class="status-tag">ACTIVE ANALYSIS</span> <br>
-        <small id="data-display">Scan QR to sync Planned vs Actual Data.</small>
+    <div class="instruction-box">
+        <strong>STEP 1:</strong> Scan QR Code to align model.<br>
+        <strong>STEP 2:</strong> Check <span style="color: #ffff00;">Yellow Wires</span> & <span style="color: #007bff;">Blue Pipes</span>.<br>
+        <p id="audit-text">Status: <span class="success-tag">BIM DATA SYNCED</span></p>
+        
+        <!-- Error Solving Feature -->
+        <button class="error-btn" onclick="alert('ERROR LOGGED: Alignment Mismatch reported to Manager.')">
+            REPORT ALIGNMENT ERROR
+        </button>
     </div>
 
 </body>
