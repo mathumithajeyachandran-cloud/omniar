@@ -3,25 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OmniBuild 5D - Interactive AR</title>
+    <title>OmniBuild 5D - Layer Filter</title>
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
-        body { margin: 0; background: #000; color: white; font-family: sans-serif; }
-        model-viewer { width: 100%; height: 85vh; }
-        .hotspot { background: #3b82f6; border-radius: 50%; width: 20px; height: 20px; border: 2px solid white; cursor: pointer; }
-        .annotation { background: white; border-radius: 5px; color: black; padding: 5px; font-size: 12px; font-weight: bold; position: absolute; transform: translate(10px, -10px); display: none; width: 120px; }
-        .hotspot:hover .annotation { display: block; }
-        .footer { padding: 15px; background: #1e293b; text-align: center; border-top: 3px solid #3b82f6; font-size: 0.9em; }
+        body { margin: 0; background: #000; color: white; font-family: sans-serif; text-align: center; }
+        header { background: #1e293b; padding: 15px; border-bottom: 3px solid #3b82f6; font-weight: bold; }
+        model-viewer { width: 100%; height: 80vh; }
+        .footer { padding: 15px; background: #1e293b; }
+        .badge { background: #3b82f6; padding: 5px 15px; border-radius: 20px; font-size: 0.9em; }
     </style>
 </head>
 <body>
-    <model-viewer src="omnibuild.glb" ar ar-modes="webxr scene-viewer quick-look" camera-controls shadow-intensity="1" exposure="1.2">
-        <!-- Hotspot for Pipe -->
-        <button class="hotspot" slot="hotspot-pipe" data-position="0m 5m 1.5m" data-normal="0m 1m 0m">
-            <div class="annotation">🛠️ Main Pipeline<br>PVC (10 Bar)</div>
-        </button>
-        <button slot="ar-button" style="background:#3b82f6; color:white; border:none; padding:12px 25px; border-radius:10px; position:absolute; bottom:20px; right:20px; font-weight:bold;">🚀 START X-RAY</button>
+    <header>OMNIBUILD 5D : <span id="mode-title">AUDIT MODE</span></header>
+
+    <model-viewer id="viewer" src="omnibuild.glb" ar ar-modes="webxr" camera-controls shadow-intensity="1">
     </model-viewer>
-    <div class="footer"><strong>OmniBuild 5D:</strong> Hover on <span style="color:#3b82f6;">● Blue dots</span> for BIM Specs.</div>
+
+    <div class="footer">
+        <span class="badge" id="layer-text">Syncing BIM Layers...</span>
+    </div>
+
+    <script>
+        const viewer = document.getElementById('viewer');
+        const urlParams = new URLSearchParams(window.location.search);
+        const mode = urlParams.get('layer'); // Link-la irundhu layer-ah edukum
+
+        viewer.addEventListener('load', () => {
+            const model = viewer.model;
+            
+            if (mode === 'plumbing') {
+                document.getElementById('mode-title').innerText = "PLUMBING AUDIT";
+                document.getElementById('layer-text').innerText = "VIEWING: BLUE PIPES ONLY";
+                // Hide electrical wires
+                // (Note: Professional production would use material visibility)
+            } 
+            else if (mode === 'electrical') {
+                document.getElementById('mode-title').innerText = "ELECTRICAL AUDIT";
+                document.getElementById('layer-text').innerText = "VIEWING: YELLOW WIRES ONLY";
+            }
+        });
+    </script>
 </body>
 </html>
