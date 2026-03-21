@@ -14,7 +14,90 @@
         header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); padding: 50px 20px; border-bottom: 5px solid #3b82f6; }
         h1 { font-size: 3em; color: #3b82f6; font-weight: 900; margin: 0; }
         
+        .container { max-width: 800px; margin: 30p<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OmniBuild 5D App</title>
+    <link rel="manifest" href="manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;900&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; margin: 0; background: #0f172a; color: white; text-align: center; padding-bottom: 100px; }
+        header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); padding: 50px 20px; border-bottom: 5px solid #3b82f6; }
+        h1 { font-size: 3em; color: #3b82f6; font-weight: 900; margin: 0; }
+        
         .container { max-width: 800px; margin: 30px auto; padding: 0 20px; }
+        .audit-hero { background: rgba(59, 130, 246, 0.1); padding: 40px; border-radius: 30px; border: 3px dashed #3b82f6; margin-bottom: 30px; }
+        .upload-btn { background: #3b82f6; color: white; border: none; padding: 18px 50px; border-radius: 50px; font-weight: 900; font-size: 1.2em; cursor: pointer; }
+
+        /* Report Card */
+        #reportCard { display: none; background: #1e293b; padding: 30px; border-radius: 25px; border-left: 10px solid #10b981; margin-top: 20px; text-align: left; }
+        .report-header { font-size: 1.5em; font-weight: 900; color: #10b981; margin-bottom: 15px; }
+
+        /* Unified Bottom Nav (4 Tabs) */
+        .bottom-nav {
+            position: fixed; bottom: 0; width: 100%; height: 85px; left: 0;
+            background: #1e293b; display: flex; justify-content: space-around;
+            align-items: center; border-top: 3px solid #3b82f6; z-index: 1000;
+        }
+        .nav-item { color: #94a3b8; text-decoration: none; text-align: center; font-size: 0.75em; font-weight: 700; flex: 1; }
+        .nav-item.active { color: #3b82f6; }
+        .nav-icon { font-size: 24px; display: block; margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>OMNIBUILD 5D</h1>
+        <p style="color:#94a3b8; margin-top:10px;">Cloud Integrated Construction OS</p>
+    </header>
+
+    <div class="container">
+        <!-- 📸 AUDIT ACTION ZONE -->
+        <div class="audit-hero">
+            <strong style="font-size: 1.5em; display: block; margin-bottom: 15px;">📸 SITE AI AUDIT</strong>
+            <input type="file" id="vInp" accept="video/*" style="display: none;">
+            <button class="upload-btn" onclick="document.getElementById('vInp').click()">SELECT VIDEO & SYNC AI</button>
+            <p id="upStatus" style="display:none; margin-top:20px; font-weight:900; color:#f59e0b;">⏳ AI SCANNING SITE... PLEASE WAIT.</p>
+
+            <div id="reportCard">
+                <div class="report-header">📝 AUDIT SUCCESS!</div>
+                <p>Status: <span id="r-stat" style="color:#3b82f6; font-weight:900;">REPORT UPDATED</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 📱 THE 4-TAB APP NAVIGATION -->
+    <nav class="bottom-nav">
+        <a href="index.html" class="nav-item active"><span class="nav-icon">🏠</span>Home</a>
+        <a href="ar_view.html" class="nav-item"><span class="nav-icon">🛡️</span>AR Site</a>
+        <a href="dashboard.html" class="nav-item"><span class="nav-icon">📉</span>Reports</a>
+        <a href="ai_engine.html" class="nav-item"><span class="nav-icon">⚡</span>AI Engine</a>
+    </nav>
+
+    <script>
+        const firebaseConfig = { databaseURL: "https://omniar-db-8ab03-default-rtdb.firebaseio.com/" };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        document.getElementById('vInp').onchange = function() {
+            document.getElementById('upStatus').style.display = 'block';
+            db.ref('ai_trigger').set({ status: "start", timestamp: Date.now() });
+        };
+
+        db.ref('ai_trigger').on('value', (snap) => {
+            if (snap.val() && snap.val().status === "idle") {
+                document.getElementById('upStatus').style.display = 'none';
+                document.getElementById('reportCard').style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>x auto; padding: 0 20px; }
 
         /* 📸 UPLOAD ZONE */
         .audit-hero { background: rgba(59, 130, 246, 0.1); padding: 40px; border-radius: 30px; border: 3px dashed #3b82f6; margin-bottom: 30px; transition: 0.5s; }
