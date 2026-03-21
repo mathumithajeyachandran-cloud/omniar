@@ -3,117 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OmniBuild 5D - Enterprise Hub</title>
+    <title>OmniBuild 5D - Master Hub</title>
     <link rel="manifest" href="manifest.json">
-    <!-- HD Fonts & Firebase Libs -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;900&display=swap" rel="stylesheet">
+    <!-- Firebase Library -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     
     <style>
-        body { font-family: 'Inter', sans-serif; margin: 0; background: #0f172a; color: white; padding-bottom: 100px; }
+        body { font-family: 'Inter', sans-serif; margin: 0; background: #0f172a; color: white; text-align: center; }
+        header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); padding: 50px 20px; border-bottom: 5px solid #3b82f6; }
+        h1 { font-size: 3em; color: #3b82f6; font-weight: 900; }
+        .container { max-width: 800px; margin: 30px auto; padding: 0 20px; padding-bottom: 120px; }
+        .audit-hero { background: rgba(59, 130, 246, 0.1); padding: 40px; border-radius: 30px; border: 3px dashed #3b82f6; margin-bottom: 30px; }
+        .upload-btn { background: #3b82f6; color: white; border: none; padding: 18px 50px; border-radius: 50px; font-weight: 900; font-size: 1.2em; cursor: pointer; }
         
-        header { 
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); 
-            padding: 50px 20px; text-align: center; border-bottom: 5px solid #3b82f6; 
-        }
-        h1 { font-size: 3.2em; margin: 0; letter-spacing: 3px; color: #3b82f6; font-weight: 900; }
-        .sub { color: #94a3b8; font-size: 1.1em; margin-top: 10px; }
+        /* STATUS MESSAGES STYLING */
+        #upStatus { margin-top: 20px; font-weight: 900; font-size: 1.2em; display: none; }
+        .status-scanning { color: #f59e0b; } /* Orange */
+        .status-success { color: #10b981; }  /* Green */
 
-        .container { max-width: 850px; margin: 30px auto; padding: 0 20px; }
-
-        /* 📸 NEW: MAIN SCREEN AI AUDIT CARD */
-        .audit-hero { 
-            background: rgba(59, 130, 246, 0.1); 
-            padding: 40px; border-radius: 30px; border: 3px dashed #3b82f6; 
-            margin-bottom: 40px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-        .upload-btn { 
-            background: #3b82f6; color: white; border: none; padding: 18px 50px; 
-            border-radius: 50px; font-weight: 900; font-size: 1.2em; cursor: pointer; 
-            box-shadow: 0 10px 25px rgba(59,130,246,0.4); transition: 0.3s;
-        }
-        .upload-btn:hover { transform: scale(1.05); background: #2563eb; }
-
-        /* PORTAL CARDS */
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .card { 
-            background: #1e293b; padding: 35px; border-radius: 25px; 
-            border: 2px solid #334155; text-decoration: none; color: white; 
-            text-align: center; transition: 0.3s;
-        }
-        .card:hover { border-color: #3b82f6; background: #232f45; }
-        .card h2 { font-size: 1.5em; margin: 15px 0 5px 0; color: #3b82f6; }
-        .card p { font-size: 0.9em; color: #94a3b8; }
-
-        /* HD BOTTOM NAVIGATION */
-        .bottom-nav {
-            position: fixed; bottom: 0; width: 100%; height: 85px; left: 0;
-            background: #1e293b; display: flex; justify-content: space-around;
-            align-items: center; border-top: 3px solid #3b82f6; z-index: 1000;
-        }
-        .nav-item { color: #94a3b8; text-decoration: none; text-align: center; font-size: 0.8em; font-weight: 700; }
-        .nav-item.active { color: #3b82f6; }
-        .nav-icon { font-size: 28px; display: block; margin-bottom: 5px; }
+        .card { background: #1e293b; padding: 30px; border-radius: 25px; border: 2px solid #334155; text-decoration: none; color: white; }
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 85px; left: 0; background: #1e293b; display: flex; justify-content: space-around; align-items: center; border-top: 3px solid #3b82f6; }
     </style>
 </head>
 <body>
 
     <header>
         <h1>OMNIBUILD 5D</h1>
-        <div class="sub">Advanced BIM 5D & Autonomous AI Tracking</div>
+        <p style="color:#94a3b8;">AI Site Audit & Integrated BIM Hub</p>
     </header>
 
     <div class="container">
-        
-        <!-- 📸 NEW: MAIN SCREEN VIDEO UPLOAD -->
+        <!-- 📸 VIDEO UPLOAD ZONE -->
         <div class="audit-hero">
-            <strong style="font-size: 1.8em; display: block; margin-bottom: 15px;">📸 SITE AI AUDIT</strong>
-            <p style="color: #cbd5e1; margin-bottom: 25px;">Upload site video for real-time progress prediction & 5D analysis.</p>
+            <strong style="font-size: 1.5em; display: block; margin-bottom: 15px;">📸 SITE AI AUDIT</strong>
             <input type="file" id="vInp" accept="video/*" style="display: none;">
             <button class="upload-btn" onclick="document.getElementById('vInp').click()">SELECT VIDEO & SYNC AI</button>
-            <p id="upStatus" style="display:none; margin-top:20px; color:#10b981; font-weight:900;">⏳ AI CLOUD SCANNING... UPDATING DASHBOARD</p>
+            
+            <!-- DYNAMIC STATUS MESSAGE -->
+            <div id="upStatus"></div>
         </div>
 
         <div class="grid">
-            <!-- Worker Portal Link -->
-            <a href="ar_view.html" class="card">
-                <span style="font-size: 40px;">🔍</span>
-                <h2>AR SITE VISION</h2>
-                <p>Launch X-Ray Utility View</p>
-            </a>
-
-            <!-- Dashboard Link -->
-            <a href="dashboard.html" class="card">
-                <span style="font-size: 40px;">📊</span>
-                <h2>LIVE REPORTS</h2>
-                <p>Planned vs Actual Analytics</p>
-            </a>
+            <a href="ar_view.html" class="card"><h3>🔍 AR SITE VIEW</h3></a>
+            <a href="dashboard.html" class="card"><h3>📊 LIVE REPORTS</h3></a>
         </div>
-
     </div>
 
-    <!-- The Pro App Navigation -->
-    <nav class="bottom-nav">
-        <a href="index.html" class="nav-item active"><span class="nav-icon">🏠</span>Home</a>
-        <a href="ar_view.html" class="nav-item"><span class="nav-icon">🛡️</span>AR Site</a>
-        <a href="dashboard.html" class="nav-item"><span class="nav-icon">📉</span>Reports</a>
-    </nav>
+    <script>
+        // 1. Firebase Config
+        const firebaseConfig = { databaseURL: "https://omniar-db-8ab03-default-rtdb.firebaseio.com/" };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
 
-<script>
-    // 1. Firebase Config (PASTE YOUR URL HERE)
-    const firebaseConfig = { databaseURL: "https://omniar-db-8ab03-default-rtdb.firebaseio.com/" };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+        const statusDiv = document.getElementById('upStatus');
 
-    // 2. Upload & Trigger Logic
-    document.getElementById('vInp').onchange = function() {
-        document.getElementById('upStatus').style.display = 'block';
-        // Sending trigger to Cloud AI (Colab)
-        db.ref('ai_trigger').set({ status: "start", timestamp: Date.now() });
-        alert("Video received! OmniBuild AI Cloud processing started.");
-    };
-</script>
+        // 2. Upload Logic
+        document.getElementById('vInp').onchange = function() {
+            statusDiv.style.display = 'block';
+            statusDiv.innerHTML = "<span class='status-scanning'>⏳ AI CLOUD SCANNING SITE...</span>";
+            // Trigger AI Brain (Colab)
+            db.ref('ai_trigger').set({ status: "start", timestamp: Date.now() });
+        };
 
+        // 3. LISTEN FOR SUCCESS SIGNAL FROM CLOUD AI
+        db.ref('ai_trigger').on('value', (snap) => {
+            const val = snap.val();
+            if (val && val.status === "idle") {
+                // If timestamp exists and it was just updated (within last 30 sec)
+                if (Date.now() - val.timestamp < 30000) {
+                    statusDiv.innerHTML = "<span class='status-success'>✅ AI AUDIT SUCCESS! DASHBOARD UPDATED.</span>";
+                    setTimeout(() => { statusDiv.style.display = 'none'; }, 5000); // 5 sec appram hide aagum
+                }
+            }
+        });
+    </script>
 </body>
 </html>
