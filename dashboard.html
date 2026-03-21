@@ -3,53 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OmniBuild 5D - Extreme HD Dashboard</title>
-    <!-- High Resolution Fonts & Libs -->
+    <title>OmniBuild 5D - Pro HD Dashboard</title>
+    <!-- High Res Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;900&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
-        body { font-family: 'Inter', sans-serif; background: #0f172a; padding: 20px; color: white; text-align: center; }
-        .container { max-width: 1100px; margin: auto; padding-bottom: 50px; }
+        body { font-family: 'Inter', sans-serif; background: #0b1120; padding: 20px; color: white; text-align: center; }
+        .container { 
+            max-width: 1000px; margin: auto; background: #161e2d; padding: 45px; 
+            border-radius: 35px; box-shadow: 0 25px 70px rgba(0,0,0,0.6); 
+            border-top: 10px solid #3b82f6; 
+        }
         
-        /* THE MASTER TITLE */
-        h1 { font-size: 3.5em; font-weight: 900; color: #3b82f6; margin-bottom: 30px; }
+        h1 { font-size: 3em; font-weight: 900; color: #3b82f6; margin-bottom: 5px; letter-spacing: 1px; }
+        .sub { color: #94a3b8; font-size: 1.1em; margin-bottom: 30px; font-weight: 700; }
 
-        /* 1. PROJECT STATUS (NOW ON TOP) */
-        .display-card { background: #1e293b; padding: 40px; border-radius: 35px; border-top: 10px solid #3b82f6; margin-bottom: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.3); }
-        .progress-bar { background: #334155; border-radius: 50px; height: 60px; margin: 30px 0; overflow: hidden; border: 3px solid #475569; }
-        .progress-fill { background: linear-gradient(90deg, #10b981, #34d399); height: 100%; width: 0%; transition: width 2s ease; }
-        .perc-display { font-size: 5em; font-weight: 900; color: #10b981; margin: 20px 0; text-shadow: 0 0 20px rgba(16, 185, 129, 0.3); }
-
-        /* HD STATS GRID */
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
-        .card { padding: 30px; background: #0f172a; border-radius: 25px; border-bottom: 8px solid #3b82f6; }
-        .card strong { font-size: 1.1em; color: #94a3b8; text-transform: uppercase; letter-spacing: 2px; }
-        .card span { font-size: 2.2em; font-weight: 900; display: block; margin-top: 15px; color: #fff; }
-
-        /* 2. VIDEO UPLOAD ZONE (NOW BELOW STATUS) */
-        .audit-hero { 
-            background: rgba(59, 130, 246, 0.1); 
-            padding: 50px 30px; border-radius: 35px; border: 4px dashed #3b82f6; 
-            margin: 40px 0;
+        /* 📸 DASHED UPLOAD BOX (From Screenshot) */
+        .audit-card { 
+            margin: 25px 0; border: 3px dashed #3b82f6; 
+            background: rgba(59, 130, 246, 0.1); padding: 35px; border-radius: 25px; 
         }
         .upload-btn { 
-            background: #3b82f6; color: white; border: none; padding: 22px 70px; 
-            border-radius: 50px; font-weight: 900; font-size: 1.6em; cursor: pointer; 
-            box-shadow: 0 10px 30px rgba(59,130,246,0.4); transition: 0.3s;
+            background: #3b82f6; color: white; border: none; padding: 18px 50px; 
+            border-radius: 50px; font-weight: 900; font-size: 1.2em; cursor: pointer; 
+            box-shadow: 0 10px 25px rgba(59,130,246,0.3); transition: 0.3s;
         }
-        .upload-btn:hover { transform: scale(1.05); background: #2563eb; }
+        .scan-msg { margin-top: 15px; color: #10b981; font-weight: 900; font-size: 0.9em; letter-spacing: 1px; }
 
-        /* 3. AI AUDIT TABLE */
-        .audit-details { background: #0f172a; padding: 35px; border-radius: 30px; margin-top: 40px; text-align: left; border: 2px solid #334155; }
-        .audit-row { display: flex; justify-content: space-between; padding: 18px 0; border-bottom: 1px solid #334155; font-size: 1.3em; }
+        /* PROGRESS BAR */
+        .progress-bar { background: #1f2937; border-radius: 50px; height: 40px; margin: 30px 0; overflow: hidden; }
+        .progress-fill { background: linear-gradient(90deg, #10b981, #34d399); height: 100%; width: 0%; transition: width 2s ease; }
+        .perc-display { font-size: 5em; font-weight: 900; color: #10b981; margin-bottom: 25px; }
 
-        /* 4. CRYSTAL CLEAR CHART (PURE HD) */
+        /* STATS GRID (From Screenshot) */
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-top: 20px; }
+        .card { padding: 30px; background: #0b1120; border-radius: 25px; border: 2px solid #1e293b; border-bottom: 5px solid #3b82f6; }
+        .card strong { font-size: 1em; color: #94a3b8; text-transform: uppercase; }
+        .card span { font-size: 2.2em; font-weight: 900; display: block; margin-top: 12px; color: #fff; }
+        
+        /* FORECAST CARD COLOR */
+        .forecast { border-color: #f59e0b; }
+        .forecast span { color: #f59e0b; }
+
+        /* 📈 WHITE CHART CARD (SUPER CLEAR) */
         .chart-container { 
-            margin-top: 50px; background: #ffffff; padding: 60px; border-radius: 40px; 
-            height: 750px; box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+            margin-top: 50px; background: #ffffff; padding: 50px; border-radius: 35px; 
+            height: 600px; box-shadow: 0 30px 80px rgba(0,0,0,0.5);
         }
     </style>
 </head>
@@ -57,76 +59,65 @@
 
 <div class="container">
     <h1>🏗️ OMNIBUILD 5D PRO</h1>
+    <div class="sub">High-Definition Site Audit & Predictive AI Engine</div>
 
-    <!-- PHASE 1: PROJECT STATUS (TOP) -->
-    <div class="display-card">
-        <div class="progress-bar"><div class="progress-fill" id="fill"></div></div>
-        <div class="perc-display" id="perc">0% COMPLETED</div>
-
-        <div class="stats-grid">
-            <div class="card"><strong>Planned Target</strong><span id="plan">-- Days</span></div>
-            <div class="card"><strong>Actual Days</strong><span id="act">-- Days</span></div>
-            <div class="card" style="border-color:#f59e0b;"><strong>AI Forecast</strong><span id="eta" style="color:#f59e0b;">TBD</span></div>
-        </div>
+    <!-- 📸 UPLOAD SECTION -->
+    <div class="audit-card">
+        <strong style="font-size: 1.1em; display: block; margin-bottom: 15px;">📸 SITE AI AUDIT ENGINE</strong>
+        <input type="file" id="vInp" accept="video/*" style="display: none;">
+        <button class="upload-btn" onclick="document.getElementById('vInp').click()">SELECT VIDEO & SYNC AI</button>
+        <div class="scan-msg">⌛ AI SCANNING SITE... UPDATING DASHBOARD</div>
     </div>
 
-    <!-- PHASE 2: VIDEO UPLOAD (NOW BELOW PROJECT STATUS) -->
-    <div class="audit-hero">
-        <strong style="font-size: 2.2em; display: block; margin-bottom: 20px; color:#fff;">📸 SITE AI AUDIT ENGINE</strong>
-        <p style="color: #94a3b8; font-size: 1.3em; margin-bottom: 30px;">Upload video for real-time BIM vs Actual comparison</p>
-        <input type="file" id="vUpload" accept="video/*" style="display: none;">
-        <button class="upload-btn" onclick="document.getElementById('vUpload').click()">SELECT VIDEO & SYNC</button>
-        <p id="upStatus" style="display:none; margin-top:20px; color:#10b981; font-weight:900; font-size:1.4em;">⏳ AI ANALYSIS STARTING...</p>
+    <div class="progress-bar"><div class="progress-fill" id="fill"></div></div>
+    <div class="perc-display" id="perc">0%</div>
+
+    <div class="stats-grid">
+        <div class="card"><strong>BIM Target</strong><span id="plan">-- Days</span></div>
+        <div class="card"><strong>Site Actual</strong><span id="act">-- Days</span></div>
+        <div class="card forecast"><strong>AI Forecast</strong><span id="eta">TBD</span></div>
     </div>
 
-    <!-- PHASE 3: AI AUDIT TABLE -->
-    <div class="audit-details">
-        <h2 style="color: #3b82f6; font-weight: 900; margin-bottom: 25px; font-size: 2em;">🤖 AI AUDIT COMPARISON</h2>
-        <div class="audit-row"><span>BIM Elements Planned:</span> <span style="color:#3b82f6; font-weight:900;" id="bim-count">-- Units</span></div>
-        <div class="audit-row"><span>Site Elements Detected:</span> <span style="color:#10b981; font-weight:900;" id="ai-count">-- Units</span></div>
-        <div class="audit-row"><span>Final Audit Status:</span> <span id="comp-status" style="font-weight:900;">Waiting for Data...</span></div>
-    </div>
-
-    <!-- PHASE 4: THE ULTIMATE HD CHART -->
+    <!-- 📈 THE HD CHART -->
     <div class="chart-container">
-        <canvas id="superHDChart"></canvas>
+        <canvas id="hdChart"></canvas>
     </div>
 </div>
 
 <script>
-    // 1. Firebase Config
+    // 1. Firebase Logic
     const firebaseConfig = { databaseURL: "https://omniar-db-8ab03-default-rtdb.firebaseio.com/" };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    // 2. EXTREME HD Chart Config (Massive labels for total clarity)
-    const ctx = document.getElementById('superHDChart').getContext('2d');
-    let superHDChart = new Chart(ctx, {
+    // 2. EXTREME HD Chart.js (Clarity Boost)
+    const ctx = document.getElementById('hdChart').getContext('2d');
+    let hdChart = new Chart(ctx, {
         type: 'bar',
         data: { 
-            labels: ['BIM TARGET (100%)', 'ACTUAL PROGRESS (%)'], 
+            labels: ['BIM TARGET (100%)', 'SITE ACTUAL (%)'], 
             datasets: [{ 
-                label: 'Site Audit Percentage (%)', 
+                label: 'Audit Status', 
                 data: [100, 0], 
-                backgroundColor: ['#2563eb', '#10b981'],
-                borderRadius: 25,
-                barThickness: 200 // Maximum thickness for the bar
+                backgroundColor: ['#3b82f6', '#10b981'],
+                borderRadius: 20,
+                barThickness: 150 
             }] 
         },
         options: { 
             responsive: true, maintainAspectRatio: false,
-            devicePixelRatio: 4, // 4X SHARPNESS (ULTRA HD)
+            devicePixelRatio: 4, // 4X SHARPNESS
             plugins: { 
-                legend: { labels: { font: { size: 30, weight: '900' }, color: '#000' } } 
+                legend: { labels: { font: { size: 28, weight: '900' }, color: '#000' } } 
             },
             scales: { 
-                y: { beginAtZero: true, max: 100, ticks: { font: { size: 25, weight: '900' }, color: '#000' } },
-                x: { ticks: { font: { size: 30, weight: '900' }, color: '#000' } } 
+                y: { beginAtZero: true, max: 100, ticks: { font: { size: 22, weight: 'bold' }, color: '#000' } },
+                x: { ticks: { font: { size: 24, weight: '900' }, color: '#000' } } 
             }
         }
     });
 
-    // 3. Sync Logic
+    // 3. Real-time Listener
     db.ref('construction_progress').on('value', (snap) => {
         const d = snap.val();
         if(d) {
@@ -134,21 +125,15 @@
             document.getElementById('perc').innerText = d.percentage + '%';
             document.getElementById('plan').innerText = d.planned_days + ' Days';
             document.getElementById('act').innerText = d.actual_days + ' Days';
-            document.getElementById('eta').innerText = d.predicted_date;
-            document.getElementById('bim-count').innerText = d.planned_objects + " Units";
-            document.getElementById('ai-count').innerText = d.actual_objects + " Units";
-            document.getElementById('comp-status').innerText = d.delay_msg;
-            document.getElementById('comp-status').style.color = d.percentage < 100 ? "#ef4444" : "#10b981";
-
-            superHDChart.data.datasets[0].data = [100, d.percentage];
-            superHDChart.update();
+            document.getElementById('eta').innerText = d.predicted_date || '...';
+            hdChart.data.datasets[0].data = [100, d.percentage];
+            hdChart.update();
         }
     });
 
-    document.getElementById('vUpload').onchange = function() {
-        document.getElementById('upStatus').style.display = 'block';
+    document.getElementById('vInp').onchange = function() {
         db.ref('ai_trigger').set({ status: "start", timestamp: Date.now() });
-        alert("Site Video Sent for Cloud AI Audit!");
+        alert("Video uploaded to OmniBuild Cloud AI!");
     };
 </script>
 </body>
