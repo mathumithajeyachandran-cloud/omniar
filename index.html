@@ -6,76 +6,115 @@
     <title>OmniBuild 5D - Master Hub</title>
     <link rel="manifest" href="manifest.json">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;900&display=swap" rel="stylesheet">
-    <!-- Firebase Library -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     
     <style>
-        body { font-family: 'Inter', sans-serif; margin: 0; background: #0f172a; color: white; text-align: center; }
+        body { font-family: 'Inter', sans-serif; margin: 0; background: #0f172a; color: white; text-align: center; padding-bottom: 100px; }
         header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); padding: 50px 20px; border-bottom: 5px solid #3b82f6; }
-        h1 { font-size: 3em; color: #3b82f6; font-weight: 900; }
-        .container { max-width: 800px; margin: 30px auto; padding: 0 20px; padding-bottom: 120px; }
-        .audit-hero { background: rgba(59, 130, 246, 0.1); padding: 40px; border-radius: 30px; border: 3px dashed #3b82f6; margin-bottom: 30px; }
-        .upload-btn { background: #3b82f6; color: white; border: none; padding: 18px 50px; border-radius: 50px; font-weight: 900; font-size: 1.2em; cursor: pointer; }
+        h1 { font-size: 3em; color: #3b82f6; font-weight: 900; margin: 0; }
         
-        /* STATUS MESSAGES STYLING */
-        #upStatus { margin-top: 20px; font-weight: 900; font-size: 1.2em; display: none; }
-        .status-scanning { color: #f59e0b; } /* Orange */
-        .status-success { color: #10b981; }  /* Green */
+        .container { max-width: 800px; margin: 30px auto; padding: 0 20px; }
 
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .card { background: #1e293b; padding: 30px; border-radius: 25px; border: 2px solid #334155; text-decoration: none; color: white; }
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 85px; left: 0; background: #1e293b; display: flex; justify-content: space-around; align-items: center; border-top: 3px solid #3b82f6; }
+        /* 📸 UPLOAD ZONE */
+        .audit-hero { background: rgba(59, 130, 246, 0.1); padding: 40px; border-radius: 30px; border: 3px dashed #3b82f6; margin-bottom: 30px; transition: 0.5s; }
+        .upload-btn { background: #3b82f6; color: white; border: none; padding: 18px 50px; border-radius: 50px; font-weight: 900; font-size: 1.2em; cursor: pointer; box-shadow: 0 10px 25px rgba(59,130,246,0.3); }
+
+        /* 📊 DYNAMIC REPORT CARD (Thani Report) */
+        #reportCard { 
+            display: none; background: #1e293b; padding: 30px; border-radius: 25px; 
+            border-left: 10px solid #10b981; margin-top: 20px; text-align: left;
+            animation: slideUp 0.5s ease-out;
+        }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        
+        .report-header { font-size: 1.5em; font-weight: 900; color: #10b981; margin-bottom: 15px; border-bottom: 1px solid #334155; padding-bottom: 10px; }
+        .report-row { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 1.1em; }
+        .val { font-weight: 900; color: #3b82f6; }
+
+        /* STATUS TAGS */
+        #upStatus { margin-top: 20px; font-weight: 900; font-size: 1.3em; display: none; padding: 15px; border-radius: 12px; }
+        .scanning { color: #f59e0b; background: rgba(245, 158, 11, 0.1); border: 1px solid #f59e0b; }
+        .success { color: #10b981; background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; }
+
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px; }
+        .card { background: #1e293b; padding: 30px; border-radius: 25px; border: 2px solid #334155; text-decoration: none; color: white; transition: 0.3s; }
+        .card:hover { border-color: #3b82f6; transform: translateY(-5px); }
     </style>
 </head>
 <body>
 
     <header>
         <h1>OMNIBUILD 5D</h1>
-        <p style="color:#94a3b8;">AI Site Audit & Integrated BIM Hub</p>
+        <p style="color:#94a3b8; margin-top:10px;">Integrated Site AI Audit & 5D BIM Hub</p>
     </header>
 
     <div class="container">
-        <!-- 📸 VIDEO UPLOAD ZONE -->
-        <div class="audit-hero">
-            <strong style="font-size: 1.5em; display: block; margin-bottom: 15px;">📸 SITE AI AUDIT</strong>
+        <!-- 📸 AUDIT ACTION ZONE -->
+        <div class="audit-hero" id="hero-box">
+            <strong style="font-size: 1.5em; display: block; margin-bottom: 15px;">📸 START SITE AUDIT</strong>
             <input type="file" id="vInp" accept="video/*" style="display: none;">
             <button class="upload-btn" onclick="document.getElementById('vInp').click()">SELECT VIDEO & SYNC AI</button>
             
-            <!-- DYNAMIC STATUS MESSAGE -->
             <div id="upStatus"></div>
+
+            <!-- 🤖 THANI REPORT (V2) - Automatic display after success -->
+            <div id="reportCard">
+                <div class="report-header">📝 LATEST AUDIT REPORT</div>
+                <div class="report-row"><span>BIM Units Planned:</span> <span class="val" id="r-plan">--</span></div>
+                <div class="report-row"><span>AI Units Detected:</span> <span class="val" id="r-act">--</span></div>
+                <div class="report-row"><span>Current Progress:</span> <span class="val" id="r-perc">--</span></div>
+                <div class="report-row"><span>Project Health:</span> <span id="r-stat" style="font-weight:900;">--</span></div>
+                <p style="font-size: 0.8em; color: #94a3b8; margin-top: 15px; text-align: center;">Verified by OmniBuild Cloud AI Engine</p>
+            </div>
         </div>
 
         <div class="grid">
-            <a href="ar_view.html" class="card"><h3>🔍 AR SITE VIEW</h3></a>
-            <a href="dashboard.html" class="card"><h3>📊 LIVE REPORTS</h3></a>
+            <a href="ar_view.html" class="card"><h3>🔍 AR SITE VISION</h3></a>
+            <a href="dashboard.html" class="card"><h3>📊 FULL ANALYTICS</h3></a>
         </div>
     </div>
 
     <script>
-        // 1. Firebase Config
         const firebaseConfig = { databaseURL: "https://omniar-db-8ab03-default-rtdb.firebaseio.com/" };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
-
         const statusDiv = document.getElementById('upStatus');
+        const reportCard = document.getElementById('reportCard');
 
-        // 2. Upload Logic
+        // 1. Upload Trigger
         document.getElementById('vInp').onchange = function() {
+            reportCard.style.display = 'none'; // Clear old report
             statusDiv.style.display = 'block';
-            statusDiv.innerHTML = "<span class='status-scanning'>⏳ AI CLOUD SCANNING SITE...</span>";
-            // Trigger AI Brain (Colab)
+            statusDiv.className = 'scanning';
+            statusDiv.innerHTML = "⏳ AI CLOUD SCANNING SITE... PLEASE WAIT.";
+            
             db.ref('ai_trigger').set({ status: "start", timestamp: Date.now() });
         };
 
-        // 3. LISTEN FOR SUCCESS SIGNAL FROM CLOUD AI
+        // 2. SUCCESS & REPORT LISTENER
+        // AI vela mudinja udane "Success" nu kaatum, and report card-ah open pannum.
         db.ref('ai_trigger').on('value', (snap) => {
             const val = snap.val();
             if (val && val.status === "idle") {
-                // If timestamp exists and it was just updated (within last 30 sec)
-                if (Date.now() - val.timestamp < 30000) {
-                    statusDiv.innerHTML = "<span class='status-success'>✅ AI AUDIT SUCCESS! DASHBOARD UPDATED.</span>";
-                    setTimeout(() => { statusDiv.style.display = 'none'; }, 5000); // 5 sec appram hide aagum
+                if (Date.now() - val.timestamp < 60000) {
+                    statusDiv.className = 'success';
+                    statusDiv.innerHTML = "✅ AI AUDIT SUCCESS! REPORT GENERATED.";
+                    
+                    // Fetch latest report details from construction_progress
+                    db.ref('construction_progress').once('value', (dataSnap) => {
+                        const d = dataSnap.val();
+                        if(d) {
+                            document.getElementById('r-plan').innerText = d.planned_objects + " Units";
+                            document.getElementById('r-act').innerText = d.actual_objects + " Units";
+                            document.getElementById('r-perc').innerText = d.percentage + "%";
+                            document.getElementById('r-stat').innerText = d.delay_msg;
+                            document.getElementById('r-stat').style.color = d.percentage < 100 ? "#ef4444" : "#10b981";
+                            
+                            // Show the Thani Report Card
+                            reportCard.style.display = 'block';
+                        }
+                    });
                 }
             }
         });
