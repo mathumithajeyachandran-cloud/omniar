@@ -5,86 +5,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OmniBuild 5D - Master Hub</title>
     <link rel="manifest" href="manifest.json">
-    <!-- HD Fonts & Firebase Libs -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;900&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     
     <style>
-        body { font-family: 'Inter', sans-serif; margin: 0; background: #0f172a; color: white; padding-bottom: 120px; }
+        body { font-family: 'Inter', sans-serif; margin: 0; background: #0f172a; color: white; text-align: center; padding-bottom: 150px; }
+        header { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); padding: 50px 20px; border-bottom: 5px solid #3b82f6; }
+        h1 { font-size: 3.5em; color: #3b82f6; font-weight: 900; margin: 0; }
+        .sub { color: #94a3b8; font-size: 1.2em; margin-top: 10px; }
+
+        .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
         
-        header { 
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); 
-            padding: 40px 20px; text-align: center; border-bottom: 5px solid #3b82f6; 
-        }
-        h1 { font-size: 3.5em; margin: 0; letter-spacing: 2px; color: #3b82f6; font-weight: 900; }
-        .sub { color: #94a3b8; font-size: 1.2em; margin-top: 5px; }
+        /* 📸 UPLOAD BOX */
+        .audit-hero { background: rgba(59, 130, 246, 0.1); padding: 50px; border-radius: 40px; border: 4px dashed #3b82f6; margin-bottom: 40px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+        .upload-btn { background: #3b82f6; color: white; border: none; padding: 22px 60px; border-radius: 60px; font-weight: 900; font-size: 1.5em; cursor: pointer; transition: 0.3s; }
+        
+        #upStatus { margin-top: 25px; font-weight: 900; font-size: 1.5em; display: none; }
+        .scanning { color: #f59e0b; }
+        .success { color: #10b981; }
 
-        .container { max-width: 900px; margin: 30px auto; padding: 0 20px; }
-
-        /* 📸 BIG AUDIT BOX */
-        .audit-hero { 
-            background: rgba(59, 130, 246, 0.1); padding: 50px 30px; 
-            border-radius: 40px; border: 4px dashed #3b82f6; 
-            margin-bottom: 40px; text-align: center;
-        }
-        .upload-btn { 
-            background: #3b82f6; color: white; border: none; padding: 22px 60px; 
-            border-radius: 50px; font-weight: 900; font-size: 1.5em; cursor: pointer; 
-            box-shadow: 0 10px 25px rgba(59,130,246,0.4); transition: 0.3s;
-        }
-
-        /* DYNAMIC STATUS COLORS */
-        #upStatus { margin-top: 25px; font-weight: 900; font-size: 1.5em; display: none; padding: 15px; border-radius: 15px; }
-        .scanning { color: #f59e0b; background: rgba(245, 158, 11, 0.1); border: 2px solid #f59e0b; }
-        .success { color: #10b981; background: rgba(16, 185, 129, 0.1); border: 2px solid #10b981; }
-
-        /* ACTION CARDS */
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .card { 
-            background: #1e293b; padding: 40px; border-radius: 30px; 
-            border: 2px solid #334155; text-decoration: none; color: white; 
-            text-align: center; transition: 0.3s; box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
+        .card { background: #1e293b; padding: 45px; border-radius: 35px; border: 2px solid #334155; text-decoration: none; color: white; transition: 0.3s; box-shadow: 0 10px 25px rgba(0,0,0,0.4); }
         .card:hover { border-color: #3b82f6; transform: translateY(-10px); }
-        .card h2 { font-size: 1.8em; margin-bottom: 5px; color: #3b82f6; }
+        .card h2 { font-size: 2em; margin-top: 15px; color: #3b82f6; }
 
-        /* 📱 BIG HD BOTTOM NAV */
+        /* 📱 THE BIG HD BOTTOM NAVIGATION (PWC Standard) */
         .bottom-nav {
-            position: fixed; bottom: 0; width: 100%; height: 95px; left: 0;
+            position: fixed; bottom: 0; width: 100%; height: 110px; left: 0;
             background: #1e293b; display: flex; justify-content: space-around;
             align-items: center; border-top: 4px solid #3b82f6; z-index: 1000;
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
         }
-        .nav-item { color: #94a3b8; text-decoration: none; text-align: center; font-size: 0.9em; font-weight: 800; flex: 1; }
-        .nav-item.active { color: #3b82f6; }
-        .nav-icon { font-size: 35px; display: block; margin-bottom: 5px; }
+        .nav-item { 
+            color: #94a3b8; text-decoration: none; text-align: center; 
+            font-size: 1.1em; font-weight: 800; flex: 1; padding: 10px;
+        }
+        .nav-item.active { color: #3b82f6; border-top: 5px solid #3b82f6; background: rgba(59,130,246,0.05); }
+        .nav-icon { font-size: 45px; display: block; margin-bottom: 8px; } /* BIG ICONS */
     </style>
 </head>
 <body>
 
     <header>
         <h1>OMNIBUILD 5D</h1>
-        <div class="sub">Autonomous Construction OS | v2.0 Pro</div>
+        <div class="sub">Autonomous Construction Platform | v2.0 Pro</div>
     </header>
 
     <div class="container">
-        
-        <!-- 📸 AUDIT ACTION ZONE -->
+        <!-- AI AUDIT ZONE -->
         <div class="audit-hero">
-            <strong style="font-size: 2em; display: block; margin-bottom: 20px;">📸 SITE AI AUDIT</strong>
+            <strong style="font-size: 2.2em; display: block; margin-bottom: 20px;">📸 SITE AI AUDIT</strong>
             <input type="file" id="vInp" accept="video/*" style="display: none;">
-            <button class="upload-btn" onclick="document.getElementById('vInp').click()">SELECT VIDEO & SYNC AI</button>
-            
+            <button class="upload-btn" onclick="document.getElementById('vInp').click()">SELECT VIDEO & SYNC</button>
             <div id="upStatus"></div>
         </div>
 
         <div class="grid">
-            <a href="ar_view.html" class="card"><span style="font-size:45px;">🛡️</span><h2>AR VISION</h2></a>
-            <a href="dashboard.html" class="card"><span style="font-size:45px;">📈</span><h2>REPORTS</h2></a>
+            <a href="ar_view.html" class="card"><span style="font-size:60px;">🛡️</span><h2>AR SITE</h2></a>
+            <a href="dashboard.html" class="card"><span style="font-size:60px;">📈</span><h2>REPORTS</h2></a>
         </div>
     </div>
 
-    <!-- 📱 THE 4-TAB NAVIGATION -->
+    <!-- 📱 GIANT HD BOTTOM NAV BAR -->
     <nav class="bottom-nav">
         <a href="index.html" class="nav-item active"><span class="nav-icon">🏠</span>HOME</a>
         <a href="ar_view.html" class="nav-item"><span class="nav-icon">🛡️</span>AR SITE</a>
@@ -93,31 +76,27 @@
     </nav>
 
 <script>
-    // 1. Firebase Config
     const firebaseConfig = { databaseURL: "https://omniar-db-8ab03-default-rtdb.firebaseio.com/" };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     const statusDiv = document.getElementById('upStatus');
 
-    // 2. Video Select ➔ Trigger AI
     document.getElementById('vInp').onchange = function() {
         statusDiv.style.display = 'block';
         statusDiv.className = 'scanning';
-        statusDiv.innerHTML = "⏳ AI CLOUD SCANNING SITE... PLEASE WAIT.";
+        statusDiv.innerHTML = "⏳ AI SCANNING SITE...";
         db.ref('ai_trigger').set({ status: "start", timestamp: Date.now() });
     };
 
-    // 3. Listen for AI Success
     db.ref('ai_trigger').on('value', (snap) => {
         const val = snap.val();
         if (val && val.status === "idle") {
             if (Date.now() - val.timestamp < 30000) {
                 statusDiv.className = 'success';
-                statusDiv.innerHTML = "✅ AI AUDIT SUCCESS! REPORT UPDATED.";
+                statusDiv.innerHTML = "✅ AI AUDIT SUCCESS!";
             }
         }
     });
 </script>
-
 </body>
 </html>
