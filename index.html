@@ -3,117 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OmniBuild 5D - Extreme Hub</title>
+    <title>OmniBuild 5D Pro</title>
     <link rel="manifest" href="manifest.json">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;900&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+
     <style>
-        /* FULL SCREEN HD SETUP */
-        body { font-family: 'Inter', sans-serif; margin: 0; background: #0b1120; color: white; text-align: center; padding-bottom: 200px; }
+        body { font-family: 'Inter', sans-serif; margin: 0; background: #0b1120; color: white; overflow: hidden; }
+        .page { display: none; height: 100vh; width: 100vw; position: absolute; top: 0; left: 0; overflow-y: auto; padding-bottom: 120px; }
+        .active { display: block; }
         
-        header { 
-            background: linear-gradient(180deg, #1e293b 0%, #0b1120 100%); 
-            padding: 80px 20px; border-bottom: 8px solid #3b82f6; 
-        }
-        h1 { font-size: 5em; margin: 0; letter-spacing: 5px; color: #3b82f6; font-weight: 900; text-shadow: 0 0 30px rgba(59,130,246,0.5); }
-        .sub { color: #94a3b8; font-size: 1.8em; margin-top: 15px; font-weight: 700; }
+        header { background: #1e293b; padding: 20px; text-align: center; border-bottom: 4px solid #3b82f6; }
+        h1 { font-size: 2.2em; margin: 0; color: #3b82f6; }
 
-        .container { max-width: 1100px; margin: 50px auto; padding: 0 30px; }
+        /* UPLOAD BOX */
+        .audit-hero { background: rgba(59, 130, 246, 0.1); padding: 40px; border-radius: 30px; border: 3px dashed #3b82f6; margin: 20px; text-align: center; }
+        .upload-btn { background: #3b82f6; color: white; border: none; padding: 15px 40px; border-radius: 50px; font-weight: 900; font-size: 1.1em; cursor: pointer; }
 
-        /* 📸 GIANT AUDIT BOX */
-        .audit-hero { 
-            background: rgba(59, 130, 246, 0.15); padding: 80px 40px; 
-            border-radius: 50px; border: 6px dashed #3b82f6; 
-            margin-bottom: 60px; box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-        }
-        .upload-btn { 
-            background: #3b82f6; color: white; border: none; padding: 30px 80px; 
-            border-radius: 100px; font-weight: 900; font-size: 2.2em; cursor: pointer; 
-            box-shadow: 0 15px 40px rgba(59,130,246,0.5); transition: 0.3s;
-        }
-        .upload-btn:hover { transform: scale(1.08); background: #2563eb; }
+        /* DASHBOARD ELEMENTS */
+        .progress-bar { background: #1f2937; border-radius: 50px; height: 35px; margin: 20px; overflow: hidden; }
+        .progress-fill { background: #10b981; height: 100%; width: 0%; transition: 1.5s; }
+        .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; }
+        .card { background: #1e293b; padding: 20px; border-radius: 15px; border-bottom: 4px solid #3b82f6; text-align: center; }
 
-        /* GIANT ACTION CARDS */
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
-        .card { 
-            background: #1e293b; padding: 60px 40px; border-radius: 45px; 
-            border: 4px solid #334155; text-decoration: none; color: white; 
-            transition: 0.4s; box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        }
-        .card:hover { border-color: #3b82f6; transform: translateY(-20px); background: #232f45; }
-        .card h2 { font-size: 2.8em; margin-top: 25px; color: #3b82f6; font-weight: 900; }
+        /* AR VIEW */
+        model-viewer { width: 100%; height: 70vh; background: #000; }
 
-        /* 📱 EXTREME JUMBO BOTTOM NAVIGATION */
-        .bottom-nav {
-            position: fixed; bottom: 0; width: 100%; height: 160px; left: 0;
-            background: #111827; display: flex; justify-content: space-around;
-            align-items: center; border-top: 10px solid #3b82f6; z-index: 1000;
-            box-shadow: 0 -20px 50px rgba(0,0,0,0.7);
-        }
-        .nav-item { 
-            color: #94a3b8; text-decoration: none; text-align: center; 
-            font-size: 1.5em; font-weight: 900; flex: 1; padding: 20px;
-        }
-        .nav-item.active { color: #3b82f6; background: rgba(59,130,246,0.1); }
-        .nav-icon { font-size: 70px; display: block; margin-bottom: 10px; } /* MASSIVE ICONS */
-
-        #upStatus { margin-top: 30px; font-weight: 900; font-size: 2.2em; display: none; }
+        /* JUMBO BOTTOM NAVIGATION */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 100px; background: #111827; display: flex; justify-content: space-around; align-items: center; border-top: 3px solid #3b82f6; z-index: 1000; }
+        .nav-item { color: #94a3b8; text-decoration: none; text-align: center; font-size: 1em; font-weight: 900; flex: 1; cursor: pointer; }
+        .nav-item.active-nav { color: #3b82f6; }
+        .nav-icon { font-size: 35px; display: block; }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>OMNIBUILD 5D</h1>
-        <div class="sub">Autonomous Construction OS | v2.0 Pro</div>
-    </header>
-
-    <div class="container">
-        <!-- AI AUDIT ZONE -->
+    <!-- PAGE 1: HOME HUB -->
+    <div id="home" class="page active">
+        <header><h1>OMNIBUILD 5D</h1></header>
         <div class="audit-hero">
-            <strong style="font-size: 3em; display: block; margin-bottom: 30px;">📸 SITE AI AUDIT</strong>
+            <strong style="font-size: 1.5em; display: block; margin-bottom: 15px;">📸 SITE AI AUDIT</strong>
             <input type="file" id="vInp" accept="video/*" style="display: none;">
-            <button class="upload-btn" onclick="document.getElementById('vInp').click()">SELECT VIDEO & SYNC AI</button>
-            <div id="upStatus"></div>
+            <button class="upload-btn" onclick="document.getElementById('vInp').click()">SELECT VIDEO & SYNC</button>
+            <div id="upStatus" style="margin-top:20px; font-weight:900; color:#f59e0b; display:none;">⏳ AI SCANNING SITE...</div>
         </div>
-
-        <div class="grid">
-            <a href="ar_view.html" class="card"><span style="font-size:100px;">🛡️</span><h2>AR SITE</h2></a>
-            <a href="dashboard.html" class="card"><span style="font-size:100px;">📉</span><h2>REPORTS</h2></a>
+        <div style="padding: 20px; text-align: left; background: #1e293b; margin: 20px; border-radius: 20px;">
+            <h3 style="color:#3b82f6;">System Engine Status</h3>
+            <p>Cloud GPU: <span style="color:#10b981;">CONNECTED</span></p>
+            <p>5D Metadata: <span style="color:#10b981;">SYNCED</span></p>
         </div>
     </div>
 
-    <!-- 📱 GIANT JUMBO NAV BAR -->
+    <!-- PAGE 2: AR VISION SCREEN -->
+    <div id="ar-view" class="page">
+        <header><h1>🛡️ SITE X-RAY</h1></header>
+        <model-viewer src="omnibuild.glb" ar camera-controls shadow-intensity="1" exposure="1.2" style="height: 80vh;">
+            <button slot="ar-button" style="background:#3b82f6; color:white; border:none; padding:12px 25px; border-radius:10px; position:absolute; bottom:20px; right:20px; font-weight:bold;">🚀 START X-RAY</button>
+        </model-viewer>
+    </div>
+
+    <!-- PAGE 3: REPORTS SCREEN -->
+    <div id="dashboard" class="page">
+        <header><h1>📉 5D ANALYTICS</h1></header>
+        <div class="progress-bar"><div class="progress-fill" id="fill"></div></div>
+        <h2 id="perc" style="text-align:center;">0% Completed</h2>
+        <div class="stats">
+            <div class="card"><strong>Planned</strong><br><span id="plan">--</span></div>
+            <div class="card"><strong>Actual</strong><br><span id="act">--</span></div>
+        </div>
+        <div style="height: 300px; background:white; margin:20px; border-radius:15px; padding:15px;"><canvas id="proChart"></canvas></div>
+    </div>
+
+    <!-- 📱 ONE APP NAVIGATION -->
     <nav class="bottom-nav">
-        <a href="index.html" class="nav-item active"><span class="nav-icon">🏠</span>HOME</a>
-        <a href="ar_view.html" class="nav-item"><span class="nav-icon">🛡️</span>AR SITE</a>
-        <a href="dashboard.html" class="nav-item"><span class="nav-icon">📉</span>REPORTS</a>
-        <a href="ai_engine.html" class="nav-item"><span class="nav-icon">⚡</span>AI BRAIN</a>
+        <div onclick="showPage('home')" id="nav-home" class="nav-item active-nav"><span class="nav-icon">🏠</span>HOME</div>
+        <div onclick="showPage('ar-view')" id="nav-ar" class="nav-item"><span class="nav-icon">🛡️</span>AR SITE</div>
+        <div onclick="showPage('dashboard')" id="nav-dash" class="nav-item"><span class="nav-icon">📉</span>REPORTS</div>
     </nav>
 
 <script>
+    // 1. Firebase Logic
     const firebaseConfig = { databaseURL: "https://omniar-db-8ab03-default-rtdb.firebaseio.com/" };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-    const statusDiv = document.getElementById('upStatus');
 
-    document.getElementById('vInp').onchange = function() {
-        statusDiv.style.display = 'block';
-        statusDiv.style.color = "#f59e0b";
-        statusDiv.innerHTML = "⏳ AI CLOUD SCANNING SITE...";
-        db.ref('ai_trigger').set({ status: "start", timestamp: Date.now() });
-    };
+    // 2. Page Swapping Logic (The "Orey App" feel)
+    function showPage(pageId) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
+        document.getElementById(pageId).classList.add('active');
+        document.getElementById('nav-' + pageId.split('-')[0]).classList.add('active-nav');
+    }
 
-    db.ref('ai_trigger').on('value', (snap) => {
-        const val = snap.val();
-        if (val && val.status === "idle") {
-            if (Date.now() - val.timestamp < 30000) {
-                statusDiv.style.color = "#10b981";
-                statusDiv.innerHTML = "✅ AI AUDIT SUCCESS!";
-            }
+    // 3. Chart logic
+    const ctx = document.getElementById('proChart').getContext('2d');
+    let proChart = new Chart(ctx, { type: 'bar', data: { labels: ['Planned', 'Actual'], datasets: [{ data: [100, 0], backgroundColor: ['#3b82f6', '#10b981'] }] }, options: { responsive: true, maintainAspectRatio: false } });
+
+    // 4. Real-time Data Listener
+    db.ref('construction_progress').on('value', (snap) => {
+        const d = snap.val();
+        if(d) {
+            document.getElementById('fill').style.width = d.percentage + '%';
+            document.getElementById('perc').innerText = d.percentage + '%';
+            document.getElementById('plan').innerText = d.planned_days + ' Days';
+            document.getElementById('act').innerText = d.actual_days + ' Days';
+            proChart.data.datasets[0].data = [100, d.percentage];
+            proChart.update();
         }
     });
+
+    // 5. Trigger
+    document.getElementById('vInp').onchange = function() {
+        document.getElementById('upStatus').style.display = 'block';
+        db.ref('ai_trigger').set({ status: "start", timestamp: Date.now() });
+    };
 </script>
 </body>
 </html>
