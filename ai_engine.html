@@ -3,81 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OmniBuild 5D - AI Control Room</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@800;900&family=Fira+Code:wght@500&display=swap" rel="stylesheet">
+    <title>OmniBuild 5D - AI Console</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; margin: 0; background: #0b1120; color: white; text-align: center; padding-bottom: 200px; }
-        header { background: linear-gradient(180deg, #1e293b 0%, #0b1120 100%); padding: 50px 20px; border-bottom: 8px solid #f59e0b; }
-        h1 { font-size: 3.5em; color: #f59e0b; font-weight: 900; }
+        body { font-family: 'Fira Code', monospace; background: #000; color: #10b981; padding: 20px; }
+        header { border-bottom: 2px solid #10b981; padding-bottom: 10px; margin-bottom: 20px; }
+        
+        /* 💻 HACKER TERMINAL STYLE */
+        #console { height: 60vh; overflow-y: auto; background: #050505; padding: 20px; border-radius: 10px; border: 1px solid #333; font-size: 1.1em; line-height: 1.5; }
+        .log-entry { margin-bottom: 5px; }
+        .system { color: #f59e0b; } /* Orange */
+        .success { color: #10b981; font-weight: bold; }
+        
+        .btn-zone { margin-top: 30px; text-align: center; }
+        .launch-link { color: #10b981; text-decoration: underline; font-size: 0.9em; cursor: pointer; }
 
-        .container { max-width: 1100px; margin: 40px auto; padding: 0 30px; display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px; }
-
-        /* 💻 LIVE CODE WINDOW */
-        .panel { background: #161e2d; border-radius: 30px; border: 3px solid #334155; overflow: hidden; text-align: left; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-        .panel-top { background: #334155; padding: 15px 25px; font-weight: bold; display: flex; justify-content: space-between; }
-        .code-view { padding: 30px; font-family: 'Fira Code', monospace; color: #10b981; font-size: 1.1em; line-height: 1.6; white-space: pre; }
-
-        /* 🚀 CONTROL PANEL */
-        .controls { background: #1e293b; padding: 40px; border-radius: 30px; border: 3px solid #334155; display: flex; flex-direction: column; justify-content: center; }
-        .status-light { padding: 20px; background: #0b1120; border-radius: 20px; margin-bottom: 30px; font-weight: 900; color: #f59e0b; }
-        .dot { height: 15px; width: 15px; background: #f59e0b; border-radius: 50%; display: inline-block; margin-right: 10px; animation: blink 1s infinite; }
-        @keyframes blink { 50% { opacity: 0.3; } }
-
-        .big-btn { 
-            background: #f59e0b; color: #000; padding: 25px; border-radius: 100px; 
-            font-weight: 900; font-size: 1.5em; text-decoration: none; transition: 0.3s;
-            box-shadow: 0 15px 40px rgba(245, 158, 11, 0.3);
-        }
-        .big-btn:hover { transform: scale(1.05); background: #fbbf24; }
-
-        /* BOTTOM NAV */
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 150px; background: #111827; display: flex; justify-content: space-around; align-items: center; border-top: 8px solid #3b82f6; z-index: 1000; }
-        .nav-item { color: #94a3b8; text-decoration: none; text-align: center; font-size: 1.3em; font-weight: 900; flex: 1; }
-        .nav-item.active { color: #3b82f6; background: rgba(59,130,246,0.1); border-top: 8px solid #3b82f6; }
-        .nav-icon { font-size: 60px; display: block; margin-bottom: 5px; }
+        /* JUMBO BOTTOM NAV */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 120px; left: 0; background: #111; display: flex; justify-content: space-around; align-items: center; border-top: 2px solid #10b981; }
+        .nav-item { color: #555; text-decoration: none; text-align: center; font-size: 1.2em; font-weight: 900; flex: 1; }
+        .nav-item.active { color: #10b981; }
     </style>
 </head>
 <body>
 
-    <header><h1>⚡ OMNIBUILD PRO : COMMAND CENTER</h1></header>
+    <header>
+        <span style="font-size: 1.5em; font-weight: 900;">⚡ OMNIBUILD AI CLOUD CONSOLE</span>
+    </header>
 
-    <div class="container">
-        <!-- LEFT: THE CODE -->
-        <div class="panel">
-            <div class="panel-top"><span>● ● ●  yolov8_audit_engine.py</span> <span>Python 3.12</span></div>
-            <div class="code-view">
-import omnibuild_ai
+    <!-- LIVE LOG WINDOW -->
+    <div id="console">
+        <div class="log-entry system">[SYSTEM]: Waiting for AI Engine activation...</div>
+    </div>
 
-# Autonomous 5D Tracking
-model = YOLO('v8_pro_model.pt')
-
-def sync_site_data():
-   # Scanning frames...
-   # Comparing with BIM Plan...
-   # Extracting 5D Metadata...
-   sync_to_firebase(results)
-   print("✅ HUB SYNC SUCCESS")
-            </div>
-        </div>
-
-        <!-- RIGHT: THE CONTROLS -->
-        <div class="controls">
-            <div class="status-light"><span class="dot"></span> ENGINE STANDBY</div>
-            <p style="color: #94a3b8; margin-bottom: 30px;">Click below to launch the autonomous Cloud GPU engine for this project.</p>
-            
-            <a href="https://colab.research.google.com/drive/1c4duU-CkD7DSlzUmQazg3EBQaxpLIWbz
-" target="_blank" class="big-btn">
-                🚀 ACTIVATE CLOUD BRAIN
-            </a>
-        </div>
+    <div class="btn-zone">
+        <!-- BUTTON JUST OPENS THE LINK IN BACKGROUND -->
+        <p>Brain is not active? <a href="https://colab.research.google.com/drive/1c4duU-CkD7DSlzUmQazg3EBQaxpLIWbz" target="_blank" class="launch-link">Launch Backend Engine</a></p>
     </div>
 
     <nav class="bottom-nav">
-        <a href="index.html" class="nav-item"><span class="nav-icon">🏠</span>HOME</a>
-        <a href="ar_view.html" class="nav-item"><span class="nav-icon">🛡️</span>AR SITE</a>
-        <a href="dashboard.html" class="nav-item"><span class="nav-icon">📉</span>REPORTS</a>
-        <a href="ai_engine.html" class="nav-item active"><span class="nav-icon">⚡</span>AI BRAIN</a>
+        <a href="index.html" class="nav-item">🏠 HOME</a>
+        <a href="ar_view.html" class="nav-item">🛡️ AR SITE</a>
+        <a href="dashboard.html" class="nav-item">📉 REPORTS</a>
+        <a href="ai_engine.html" class="nav-item active">⚡ AI BRAIN</a>
     </nav>
 
+<script>
+    const firebaseConfig = { databaseURL: "https://omniar-db-8ab03-default-rtdb.firebaseio.com/" };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const consoleDiv = document.getElementById('console');
+
+    // Firebase listener to show LIVE LOGS from Colab
+    db.ref('ai_logs').on('value', (snap) => {
+        const log = snap.val();
+        if (log) {
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = `<span class='system'>[${new Date().toLocaleTimeString()}]:</span> ${log.message}`;
+            consoleDiv.appendChild(entry);
+            consoleDiv.scrollTop = consoleDiv.scrollHeight; // Auto scroll
+        }
+    });
+</script>
 </body>
 </html>
