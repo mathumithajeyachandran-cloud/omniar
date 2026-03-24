@@ -3,93 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OmniBuild 5D - HD Audit Dashboard</title>
+    <title>OmniBuild 5D - HD Executive Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;900&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
     <style>
-        body { font-family: 'Inter', sans-serif; background: #0f172a; padding: 20px; color: white; text-align: center; }
-        .container { max-width: 1000px; margin: auto; padding-bottom: 50px; }
-        h1 { font-size: 3.5em; font-weight: 900; color: #3b82f6; margin-bottom: 30px; }
+        body { font-family: 'Inter', sans-serif; background: #0b1120; color: white; text-align: center; padding: 20px; }
+        .container { max-width: 800px; margin: auto; background: #161e2d; padding: 40px; border-radius: 35px; box-shadow: 0 30px 60px rgba(0,0,0,0.5); border-top: 8px solid #3b82f6; }
+        
+        h1 { font-size: 2.5em; color: #3b82f6; margin-bottom: 5px; font-weight: 900; }
+        .sub { color: #94a3b8; font-size: 0.9em; margin-bottom: 30px; }
 
-        /* 📸 UPLOAD SECTION */
-        .audit-hero { background: rgba(59, 130, 246, 0.1); padding: 40px; border-radius: 35px; border: 4px dashed #3b82f6; margin: 30px 0; }
-        .upload-btn { background: #3b82f6; color: white; border: none; padding: 20px 60px; border-radius: 50px; font-weight: 900; font-size: 1.5em; cursor: pointer; transition: 0.3s; }
-
-        /* 🎥 VIDEO PREVIEW BOX (New Feature) */
-        #video-container { display: none; margin-top: 30px; background: #000; border-radius: 20px; overflow: hidden; border: 3px solid #3b82f6; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        video { width: 100%; max-height: 400px; display: block; }
-
-        /* PROGRESS DISPLAY */
-        .display-card { background: #1e293b; padding: 40px; border-radius: 35px; border-top: 10px solid #3b82f6; margin: 30px 0; }
-        .progress-bar { background: #334155; border-radius: 50px; height: 60px; margin: 30px 0; overflow: hidden; border: 3px solid #475569; }
+        /* Progress Section */
+        .progress-bar { background: #1f2937; border-radius: 50px; height: 35px; margin: 20px 0; overflow: hidden; }
         .progress-fill { background: linear-gradient(90deg, #10b981, #34d399); height: 100%; width: 0%; transition: 2s; }
-        .perc-display { font-size: 5em; font-weight: 900; color: #10b981; }
+        .perc-val { font-size: 4em; font-weight: 900; color: #10b981; margin-bottom: 20px; }
 
-        /* STATS GRID */
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
-        .card { padding: 30px; background: #0f172a; border-radius: 25px; border-bottom: 8px solid #3b82f6; }
-        .card strong { font-size: 1.1em; color: #94a3b8; text-transform: uppercase; }
-        .card span { font-size: 2.2em; font-weight: 900; display: block; margin-top: 15px; color: #fff; }
+        /* HD Stats Grid */
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .card { padding: 25px; background: #0b1120; border-radius: 20px; border: 2px solid #1e293b; border-bottom: 5px solid #3b82f6; }
+        .card strong { font-size: 0.8em; color: #94a3b8; text-transform: uppercase; }
+        .card span { font-size: 2em; font-weight: 900; display: block; margin-top: 10px; color: #fff; }
+        .forecast { border-color: #f59e0b; } .forecast span { color: #f59e0b; }
 
-        /* HD CHART */
-        .chart-box { margin-top: 50px; background: white; padding: 40px; border-radius: 40px; height: 700px; }
+        /* White HD Chart Box */
+        .chart-box { margin-top: 40px; background: #ffffff; padding: 40px; border-radius: 30px; height: 500px; }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <h1>🏗️ OMNIBUILD 5D PRO</h1>
-
-    <!-- 1. UPLOAD ZONE -->
-    <div class="audit-hero">
-        <strong style="font-size: 2.2em; display: block; margin-bottom: 20px;">📸 SITE AI AUDIT ENGINE</strong>
-        <input type="file" id="vUpload" accept="video/*" style="display: none;">
-        <button class="upload-btn" onclick="document.getElementById('vUpload').click()">SELECT VIDEO & SYNC AI</button>
-        
-        <!-- VIDEO PREVIEW (Andha video inga theriyum) -->
-        <div id="video-container">
-            <video id="videoPreview" controls></video>
-            <div style="background:#3b82f6; padding:10px; font-weight:bold;">CURRENT AUDIT FOOTAGE</div>
-        </div>
-        
-        <p id="upStatus" style="display:none; margin-top:20px; color:#10b981; font-weight:900; font-size:1.4em;">⏳ AI SCANNING SITE... UPDATING REPORT</p>
-    </div>
-
-    <!-- 2. STATUS ZONE -->
-    <div class="display-card">
+    <div class="container">
+        <h1>🏗️ OMNIBUILD 5D PRO</h1>
+        <div class="sub">High-Definition Real-time Site Analytics</div>
         <div class="progress-bar"><div class="progress-fill" id="fill"></div></div>
-        <div class="perc-display" id="perc">0%</div>
-
+        <div class="perc-val" id="perc">0%</div>
         <div class="stats-grid">
             <div class="card"><strong>BIM Target</strong><span id="plan">-- Days</span></div>
-            <div class="card"><strong>Actual Progress</strong><span id="act">-- Days</span></div>
-            <div class="card" style="border-color:#f59e0b;"><strong>AI Forecast</strong><span id="eta" style="color:#f59e0b;">TBD</span></div>
+            <div class="card"><strong>Site Actual</strong><span id="act">-- Days</span></div>
+            <div class="card forecast"><strong>AI Forecast</strong><span id="eta">TBD</span></div>
         </div>
+        <div class="chart-box"><canvas id="hdChart"></canvas></div>
     </div>
-
-    <!-- 3. CHART ZONE -->
-    <div class="chart-box">
-        <canvas id="superHDChart"></canvas>
-    </div>
-</div>
-
 <script>
     const firebaseConfig = { databaseURL: "https://omniar-db-8ab03-default-rtdb.firebaseio.com/" };
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-
-    // HD Chart Setup
-    const ctx = document.getElementById('superHDChart').getContext('2d');
-    let superHDChart = new Chart(ctx, {
-        type: 'bar',
-        data: { labels: ['BIM TARGET (100%)', 'SITE ACTUAL (%)'], datasets: [{ label: 'Audit Status', data: [100, 0], backgroundColor: ['#3b82f6', '#10b981'], borderRadius: 20, barThickness: 180 }] },
-        options: { responsive: true, maintainAspectRatio: false, devicePixelRatio: 4, plugins: { legend: { labels: { font: { size: 28, weight: '900' }, color: '#000' } } }, scales: { y: { beginAtZero: true, max: 100, ticks: { font: { size: 22, weight: 'bold' }, color: '#000' } }, x: { ticks: { font: { size: 26, weight: '900' }, color: '#000' } } } }
+    const ctx = document.getElementById('hdChart').getContext('2d');
+    let hdChart = new Chart(ctx, { 
+        type: 'bar', 
+        data: { labels: ['BIM TARGET (100%)', 'SITE ACTUAL (%)'], datasets: [{ label: 'Completion Status', data: [100, 0], backgroundColor: ['#3b82f6', '#10b981'], borderRadius: 15, barThickness: 120 }] },
+        options: { responsive: true, maintainAspectRatio: false, devicePixelRatio: 4, scales: { y: { beginAtZero: true, max: 100, ticks: { font: { size: 16, weight: 'bold' } } }, x: { ticks: { font: { size: 18, weight: 'bold' } } } } }
     });
-
-    // Firebase Sync
     db.ref('construction_progress').on('value', (snap) => {
         const d = snap.val();
         if(d) {
@@ -97,25 +61,10 @@
             document.getElementById('perc').innerText = d.percentage + '%';
             document.getElementById('plan').innerText = d.planned_days + ' Days';
             document.getElementById('act').innerText = d.actual_days + ' Days';
-            document.getElementById('eta').innerText = d.predicted_date || '...';
-            superHDChart.data.datasets[0].data = [100, d.percentage];
-            superHDChart.update();
+            document.getElementById('eta').innerText = d.predicted_date;
+            hdChart.data.datasets[0].data = [100, d.percentage]; hdChart.update();
         }
     });
-
-    // 🎥 VIDEO PREVIEW LOGIC
-    document.getElementById('vUpload').onchange = function(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const blobURL = URL.createObjectURL(file);
-            document.getElementById('videoPreview').src = blobURL;
-            document.getElementById('video-container').style.display = 'block';
-            document.getElementById('upStatus').style.display = 'block';
-            
-            // Firebase Trigger
-            db.ref('ai_trigger').set({ status: "start", timestamp: Date.now() });
-        }
-    };
 </script>
 </body>
 </html>
