@@ -3,97 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OmniBuild 5D Pro - Final Edition</title>
+    <title>OmniBuild 5D Pro</title>
     <link rel="manifest" href="manifest.json">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;900&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
 
     <style>
-        /* EXTREME JUMBO STYLE */
-        body { font-family: 'Inter', sans-serif; margin: 0; background: #0b1120; color: white; overflow-x: hidden; text-align: center; padding-bottom: 220px; }
+        body { font-family: 'Inter', sans-serif; margin: 0; background: #0b1120; color: white; overflow-x: hidden; text-align: center; padding-bottom: 150px; }
         .page { display: none; width: 100vw; min-height: 100vh; position: absolute; top: 0; left: 0; overflow-y: auto; }
         .active { display: block; }
-        header { background: #1e293b; padding: 50px; border-bottom: 12px solid #3b82f6; font-size: 3.5em; font-weight: 900; color: #3b82f6; text-transform: uppercase; }
-
-        .container { max-width: 1200px; margin: 40px auto; padding: 0 30px; }
-
-        /* 📸 UPLOAD SECTION */
-        .audit-hero { background: rgba(59, 130, 246, 0.1); padding: 70px; border-radius: 40px; border: 5px dashed #3b82f6; margin-bottom: 30px; }
-        .upload-btn { background: #3b82f6; color: white; border: none; padding: 25px 80px; border-radius: 100px; font-weight: 900; font-size: 2em; cursor: pointer; }
         
-        /* 🚀 JUMBO ACTION PORTALS */
-        .portal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 40px; }
-        .giant-card { background: linear-gradient(135deg, #1e293b, #0f172a); padding: 80px 40px; border-radius: 50px; border: 4px solid #334155; cursor: pointer; transition: 0.4s; }
-        .giant-icon { font-size: 110px; display: block; margin-bottom: 20px; }
+        header { background: #1e293b; padding: 40px; border-bottom: 5px solid #3b82f6; }
+        h1 { font-size: 3em; color: #3b82f6; font-weight: 900; margin: 0; }
 
-        /* 📊 MONTH STYLE ANALYTICS */
-        .perc-display { font-size: 10em; font-weight: 900; color: #10b981; margin: 30px 0; }
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 30px; }
-        .stat-card { padding: 35px; background: #1e293b; border-radius: 30px; border-bottom: 10px solid #3b82f6; }
-        .stat-card span { font-size: 2.2em; font-weight: 900; display: block; margin-top: 10px; color: white; }
+        .container { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
 
-        /* 📈 ULTRA HD CHART */
-        .chart-box { background: white; padding: 50px; border-radius: 50px; height: 750px; margin-top: 60px; }
+        /* 🚀 MAIN HUB CARDS (Sharp & Clear) */
+        .portal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 40px; }
+        .portal-card { background: #1e293b; padding: 50px 30px; border-radius: 25px; border: 2px solid #334155; cursor: pointer; transition: 0.3s; }
+        .portal-card:hover { border-color: #3b82f6; transform: translateY(-10px); background: #232f45; }
+        .icon { font-size: 80px; display: block; margin-bottom: 15px; }
 
-        /* 📜 HISTORY LOGS */
-        .history-item { background: #1e293b; padding: 40px; border-radius: 35px; margin-bottom: 25px; text-align: left; border: 1px solid #334155; border-left: 20px solid #10b981; font-size: 1.8em; }
-        .clear-btn { background: #ef4444; color: white; border: none; padding: 15px 40px; border-radius: 15px; font-weight: 900; cursor: pointer; margin-top: 40px; }
+        /* 📊 REPORTS & HISTORY */
+        .perc-val { font-size: 6em; font-weight: 900; color: #10b981; margin: 20px 0; }
+        .chart-box { background: white; padding: 30px; border-radius: 30px; height: 500px; margin-top: 40px; }
+        
+        .history-box { background: #1e293b; padding: 30px; border-radius: 25px; margin-bottom: 15px; text-align: left; display: flex; justify-content: space-between; align-items: center; border: 1px solid #334155; }
+        .del-btn { background: #ef4444; border: none; color: white; padding: 10px 20px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        .clear-all { background: #dc3545; width: 100%; padding: 20px; border: none; color: white; font-weight: 900; border-radius: 15px; margin-top: 30px; cursor: pointer; }
 
-        /* 📱 JUMBO NAV */
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 180px; background: #111827; display: flex; justify-content: space-around; align-items: center; border-top: 10px solid #3b82f6; z-index: 1000; }
-        .nav-item { color: #555; text-decoration: none; text-align: center; font-size: 1.8em; font-weight: 900; flex: 1; cursor: pointer; }
-        .active-nav { color: #3b82f6; background: rgba(59,130,246,0.1); }
-        .nav-icon { font-size: 80px; display: block; }
+        /* 📸 AR QR CODE */
+        .qr-overlay { position: absolute; top: 120px; right: 20px; background: white; padding: 10px; border-radius: 15px; border: 3px solid #3b82f6; width: 100px; z-index: 100; text-align: center; }
+
+        /* BOTTOM NAV */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 120px; background: #111827; display: flex; justify-content: space-around; align-items: center; border-top: 5px solid #3b82f6; z-index: 1000; }
+        .nav-item { color: #555; text-decoration: none; text-align: center; font-size: 1.1em; font-weight: 900; flex: 1; cursor: pointer; }
+        .active-nav { color: #3b82f6; }
+        .nav-icon { font-size: 50px; display: block; }
     </style>
 </head>
 <body>
 
-    <!-- HOME HUB -->
+    <!-- PORTAL 1: HUB -->
     <div id="home" class="page active">
-        <header>OMNIBUILD 5D</header>
+        <header>OMNIBUILD 5D PRO</header>
         <div class="container">
-            <div class="audit-hero">
-                <input type="file" id="vInp" accept="video/*" style="display: none;">
-                <button class="upload-btn" onclick="document.getElementById('vInp').click()">🚀 SELECT VIDEO & SYNC</button>
-                <div id="upStatus" style="margin-top:20px; font-weight:900; font-size:2em; color:#f59e0b;"></div>
-            </div>
             <div class="portal-grid">
-                <div class="giant-card" onclick="showPage('ar-view')"><span class="giant-icon">🛡️</span><h2>AR SITE</h2></div>
-                <div class="giant-card" onclick="showPage('dashboard')"><span class="giant-icon">📊</span><h2>REPORTS</h2></div>
+                <div class="portal-card" onclick="showPage('ar-view')"><span class="icon">🛡️</span><h2>AR SITE VISION</h2></div>
+                <div class="portal-card" onclick="showPage('dashboard')"><span class="icon">📊</span><h2>EXECUTIVE REPORTS</h2></div>
+                <div class="portal-card" onclick="showPage('ai-brain')" style="grid-column: span 2; border-color: #f59e0b;">
+                    <span class="icon">🧠</span><h2 style="color:#f59e0b;">AI AUDIT TERMINAL</h2>
+                    <p style="color:#94a3b8;">Click here to upload video and start AI tracking</p>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- AR VIEW PORTAL (With QR) -->
+    <!-- PORTAL 2: AR VISION -->
     <div id="ar-view" class="page">
         <header>🛡️ X-RAY VISION</header>
-        <div style="position: absolute; top: 120px; right: 20px; background: white; padding: 15px; border-radius: 20px; border: 4px solid #3b82f6; width: 120px; z-index: 100; text-align:center;">
+        <div class="qr-overlay">
             <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://mathumithajeyachandran-cloud.github.io/omniar/" style="width: 100%;">
-            <p style="color:black; font-size:12px; font-weight:900;">SYNC BIM</p>
+            <p style="color:black; font-size:10px; font-weight:900;">SYNC BIM</p>
         </div>
         <model-viewer src="omnibuild.glb" ar camera-controls exposure="1.2" style="width:100%; height:85vh; background:#000;"></model-viewer>
     </div>
 
-    <!-- REPORTS PORTAL -->
+    <!-- PORTAL 3: REPORTS -->
     <div id="dashboard" class="page">
-        <header>📉 5D REPORTS</header>
+        <header>📈 LIVE ANALYTICS</header>
         <div class="container">
-            <div id="perc" class="perc-display">0%</div>
-            <div class="stats-grid">
-                <div class="stat-card"><strong>Planned (2026)</strong><span id="plan">-- --</span></div>
-                <div class="stat-card"><strong>Actual (2026)</strong><span id="act">-- --</span></div>
-                <div class="stat-card" style="border-color:#f59e0b; color:#f59e0b;"><strong>AI Forecast</strong><span id="eta">TBD</span></div>
+            <div id="perc" class="perc-val">0%</div>
+            <div class="chart-box"><canvas id="proChart"></canvas></div>
+            
+            <h2 style="margin-top:60px; text-align:left;">🕒 AUDIT HISTORY</h2>
+            <div id="audit-history-list"></div>
+            
+            <button class="clear-all" onclick="clearAllLogs()">🗑️ DELETE ALL HISTORY</button>
+        </div>
+    </div>
+
+    <!-- PORTAL 4: AI BRAIN (Direct Launch) -->
+    <div id="ai-brain" class="page">
+        <header>🧠 AI CLOUD ENGINE</header>
+        <div class="container">
+            <div style="background:#1e293b; padding:60px; border-radius:30px; margin-top:50px; border:2px dashed #f59e0b;">
+                <h2 style="font-size:3em; color:#f59e0b;">Ready for Audit</h2>
+                <p>Launch our serverless GPU engine to process site video.</p><br>
+                <a href="https://huggingface.co/spaces/mathusugi/omnibuild-5d-ai" target="_blank" style="background:#f59e0b; color:black; padding:25px 60px; border-radius:50px; font-weight:900; font-size:1.5em; text-decoration:none;">🚀 LAUNCH AUDIT TOOL</a>
             </div>
-            <div class="chart-box"><canvas id="finalChart"></canvas></div>
-            
-            <h2 style="font-size:4em; margin-top:100px;">🕒 AUDIT HISTORY</h2>
-            <div id="audit-list"></div>
-            
-            <!-- DELETE OPTION -->
-            <button class="clear-btn" onclick="clearLogs()">🗑️ RESET ALL AUDIT LOGS</button>
         </div>
     </div>
 
@@ -101,6 +102,7 @@
         <div onclick="showPage('home')" id="nav-home" class="nav-item active-nav"><span class="nav-icon">🏠</span>HOME</div>
         <div onclick="showPage('ar-view')" id="nav-ar" class="nav-item"><span class="nav-icon">🛡️</span>AR SITE</div>
         <div onclick="showPage('dashboard')" id="nav-dash" class="nav-item"><span class="nav-icon">📈</span>REPORTS</div>
+        <div onclick="showPage('ai-brain')" id="nav-ai" class="nav-item"><span class="nav-icon">⚡</span>AI BRAIN</div>
     </nav>
 
 <script>
@@ -112,45 +114,41 @@
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
         document.getElementById(pId).classList.add('active');
-        const navId = pId === 'home' ? 'nav-home' : pId === 'ar-view' ? 'nav-ar' : 'nav-dash';
-        document.getElementById(navId).classList.add('active-nav');
+        const nId = pId === 'home'?'nav-home': pId === 'ar-view'?'nav-ar': pId === 'dashboard'?'nav-dash':'nav-ai';
+        document.getElementById(nId).classList.add('active-nav');
         window.scrollTo(0,0);
     }
 
-    const ctx = document.getElementById('finalChart').getContext('2d');
-    let finalChart = new Chart(ctx, { type: 'bar', data: { labels: ['PLANNED', 'ACTUAL'], datasets: [{ label: '% Done', data: [100, 0], backgroundColor: ['#3b82f6', '#10b981'], barThickness: 200 }] }, options: { responsive: true, maintainAspectRatio: false, devicePixelRatio: 4, scales: { y: { ticks: { font: { size: 30, weight: 'bold' } } }, x: { ticks: { font: { size: 35, weight: 'bold' } } } } } });
+    const ctx = document.getElementById('proChart').getContext('2d');
+    let proChart = new Chart(ctx, { type: 'bar', data: { labels: ['TARGET', 'ACTUAL'], datasets: [{ data: [100, 0], backgroundColor: ['#3b82f6', '#10b981'], barThickness: 150 }] }, options: { responsive: true, maintainAspectRatio: false, devicePixelRatio: 3 } });
 
     db.ref('construction_progress').on('value', (snap) => {
         const d = snap.val();
-        if(d) {
-            document.getElementById('perc').innerText = d.percentage + '%';
-            document.getElementById('plan').innerText = d.planned_date || '-- --';
-            document.getElementById('act').innerText = d.actual_date || '-- --';
-            document.getElementById('eta').innerText = d.predicted_date || '...';
-            finalChart.data.datasets[0].data = [100, d.percentage]; finalChart.update();
-        }
+        if(d) { document.getElementById('perc').innerText = d.percentage + '%'; proChart.data.datasets[0].data = [100, d.percentage]; proChart.update(); }
     });
 
+    // 🟢 HISTORY LISTENER WITH SELECTIVE DELETE
     db.ref('audit_history').on('value', (snap) => {
         const logs = snap.val();
         let html = "";
         if (logs) {
-            Object.keys(logs).reverse().forEach(k => {
-                const item = logs[k];
-                html += `<div class="history-item">DATE: ${item.timestamp} <br> <strong>Result: ${item.percentage}% - SUCCESS</strong></div>`;
+            Object.keys(logs).reverse().forEach(key => {
+                const item = logs[key];
+                html += `
+                    <div class="history-box">
+                        <div>
+                            <strong>${item.timestamp}</strong>
+                            <span>Result: ${item.percentage}% Completion</span>
+                        </div>
+                        <button class="del-btn" onclick="deleteAudit('${key}')">❌ Delete</button>
+                    </div>`;
             });
         }
-        document.getElementById('audit-list').innerHTML = html;
+        document.getElementById('audit-history-list').innerHTML = html;
     });
 
-    function clearLogs() {
-        if(confirm("Delete all Audit History?")) { db.ref('audit_history').remove(); alert("Logs Cleared!"); }
-    }
-
-    document.getElementById('vInp').onchange = function() {
-        document.getElementById('upStatus').innerText = "⏳ AI CLOUD SCANNING SITE...";
-        db.ref('ai_trigger').set({ status: "start", timestamp: Date.now() });
-    };
+    function deleteAudit(key) { if(confirm("Delete this record?")) db.ref('audit_history').child(key).remove(); }
+    function clearAllLogs() { if(confirm("Clear all history?")) db.ref('audit_history').remove(); }
 </script>
 </body>
 </html>
