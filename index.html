@@ -3,122 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OmniBuild 5D Pro - Final Integrated App</title>
+    <title>OmniBuild 5D Pro - Final Edition</title>
     <link rel="manifest" href="manifest.json">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@800;900&display=swap" rel="stylesheet">
-    <!-- Standard Professional Libraries -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
 
     <style>
-        /* EXTREME JUMBO STYLE - HD QUALITY */
+        /* EXTREME JUMBO STYLE */
         body { font-family: 'Inter', sans-serif; margin: 0; background: #0b1120; color: white; overflow-x: hidden; text-align: center; padding-bottom: 220px; }
         .page { display: none; width: 100vw; min-height: 100vh; position: absolute; top: 0; left: 0; overflow-y: auto; }
         .active { display: block; }
-        header { background: #1e293b; padding: 50px; border-bottom: 10px solid #3b82f6; font-size: 3.5em; font-weight: 900; color: #3b82f6; }
+        header { background: #1e293b; padding: 50px; border-bottom: 12px solid #3b82f6; font-size: 3.5em; font-weight: 900; color: #3b82f6; text-transform: uppercase; }
 
-        .container { max-width: 1200px; margin: 40px auto; padding: 0 40px; }
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 30px; }
 
-        /* ACTION ZONE */
-        .audit-hero { background: rgba(59, 130, 246, 0.1); padding: 60px; border-radius: 40px; border: 5px dashed #3b82f6; margin-bottom: 30px; }
+        /* 📸 UPLOAD SECTION */
+        .audit-hero { background: rgba(59, 130, 246, 0.1); padding: 70px; border-radius: 40px; border: 5px dashed #3b82f6; margin-bottom: 30px; }
         .upload-btn { background: #3b82f6; color: white; border: none; padding: 25px 80px; border-radius: 100px; font-weight: 900; font-size: 2em; cursor: pointer; }
         
-        /* JUMBO CARDS */
+        /* 🚀 JUMBO ACTION PORTALS */
         .portal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 40px; }
-        .giant-card { background: linear-gradient(135deg, #1e293b, #0f172a); padding: 70px 40px; border-radius: 50px; border: 4px solid #334155; cursor: pointer; transition: 0.4s; }
-        .giant-card:hover { transform: translateY(-15px); border-color: #3b82f6; }
+        .giant-card { background: linear-gradient(135deg, #1e293b, #0f172a); padding: 80px 40px; border-radius: 50px; border: 4px solid #334155; cursor: pointer; transition: 0.4s; }
         .giant-icon { font-size: 110px; display: block; margin-bottom: 20px; }
 
-        /* REPORTS */
+        /* 📊 MONTH STYLE ANALYTICS */
+        .perc-display { font-size: 10em; font-weight: 900; color: #10b981; margin: 30px 0; }
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 30px; }
         .stat-card { padding: 35px; background: #1e293b; border-radius: 30px; border-bottom: 10px solid #3b82f6; }
-        .stat-card span { font-size: 2.2em; font-weight: 900; display: block; margin-top: 10px; }
-        .chart-box { background: white; padding: 50px; border-radius: 50px; height: 750px; margin-top: 60px; box-shadow: 0 30px 60px rgba(0,0,0,0.5); }
+        .stat-card span { font-size: 2.2em; font-weight: 900; display: block; margin-top: 10px; color: white; }
 
-        /* 📜 SELECTIVE DELETE LOGS */
-        .history-item { 
-            background: #1e293b; padding: 40px; border-radius: 35px; 
-            margin-bottom: 25px; text-align: left; border: 2px solid #334155; 
-            border-left: 20px solid #10b981; font-size: 1.8em;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .del-btn { background: #ef4444; color: white; border: none; width: 80px; height: 80px; border-radius: 20px; cursor: pointer; font-size: 1.2em; }
+        /* 📈 ULTRA HD CHART */
+        .chart-box { background: white; padding: 50px; border-radius: 50px; height: 750px; margin-top: 60px; }
 
-        /* 📱 EXTREME JUMBO 4-TAB NAVIGATION BAR */
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 180px; background: #111827; display: flex; justify-content: space-around; align-items: center; border-top: 10px solid #3b82f6; z-index: 1000; box-shadow: 0 -30px 60px rgba(0,0,0,0.8); }
+        /* 📜 HISTORY LOGS */
+        .history-item { background: #1e293b; padding: 40px; border-radius: 35px; margin-bottom: 25px; text-align: left; border: 1px solid #334155; border-left: 20px solid #10b981; font-size: 1.8em; }
+        .clear-btn { background: #ef4444; color: white; border: none; padding: 15px 40px; border-radius: 15px; font-weight: 900; cursor: pointer; margin-top: 40px; }
+
+        /* 📱 JUMBO NAV */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 180px; background: #111827; display: flex; justify-content: space-around; align-items: center; border-top: 10px solid #3b82f6; z-index: 1000; }
         .nav-item { color: #555; text-decoration: none; text-align: center; font-size: 1.8em; font-weight: 900; flex: 1; cursor: pointer; }
-        .active-nav { color: #3b82f6; background: rgba(59,130,246,0.1); border-top: 8px solid #3b82f6; }
-        .nav-icon { font-size: 80px; display: block; margin-bottom: 10px; }
+        .active-nav { color: #3b82f6; background: rgba(59,130,246,0.1); }
+        .nav-icon { font-size: 80px; display: block; }
     </style>
 </head>
 <body>
 
-    <!-- 1. HUB -->
+    <!-- HOME HUB -->
     <div id="home" class="page active">
         <header>OMNIBUILD 5D</header>
         <div class="container">
             <div class="audit-hero">
                 <input type="file" id="vInp" accept="video/*" style="display: none;">
                 <button class="upload-btn" onclick="document.getElementById('vInp').click()">🚀 SELECT VIDEO & SYNC</button>
-                <div id="upStatus" style="margin-top:30px; font-weight:900; font-size:1.8em; color:#f59e0b;"></div>
+                <div id="upStatus" style="margin-top:20px; font-weight:900; font-size:2em; color:#f59e0b;"></div>
             </div>
             <div class="portal-grid">
                 <div class="giant-card" onclick="showPage('ar-view')"><span class="giant-icon">🛡️</span><h2>AR SITE</h2></div>
-                <div class="giant-card" onclick="showPage('dashboard')"><span class="giant-icon">📉</span><h2>REPORTS</h2></div>
+                <div class="giant-card" onclick="showPage('dashboard')"><span class="giant-icon">📊</span><h2>REPORTS</h2></div>
             </div>
         </div>
     </div>
 
-    <!-- 2. AR VISION (With Floating QR Code) -->
+    <!-- AR VIEW PORTAL (With QR) -->
     <div id="ar-view" class="page">
         <header>🛡️ X-RAY VISION</header>
-        <div style="position: absolute; top: 120px; right: 20px; background: white; padding: 15px; border-radius: 20px; border: 3px solid #3b82f6; width: 130px; z-index: 100; text-align:center;">
+        <div style="position: absolute; top: 120px; right: 20px; background: white; padding: 15px; border-radius: 20px; border: 4px solid #3b82f6; width: 120px; z-index: 100; text-align:center;">
             <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://mathumithajeyachandran-cloud.github.io/omniar/" style="width: 100%;">
-            <p style="color:black; font-size:12px; font-weight:900;">SCAN FOR BIM</p>
+            <p style="color:black; font-size:12px; font-weight:900;">SYNC BIM</p>
         </div>
         <model-viewer src="omnibuild.glb" ar camera-controls exposure="1.2" style="width:100%; height:85vh; background:#000;"></model-viewer>
     </div>
 
-    <!-- 3. REPORTS (Month Style + Selective Delete) -->
+    <!-- REPORTS PORTAL -->
     <div id="dashboard" class="page">
         <header>📉 5D REPORTS</header>
         <div class="container">
-            <div style="font-size: 8em; font-weight: 900; color: #10b981; margin: 30px 0;" id="perc">0%</div>
+            <div id="perc" class="perc-display">0%</div>
             <div class="stats-grid">
                 <div class="stat-card"><strong>Planned (2026)</strong><span id="plan">-- --</span></div>
                 <div class="stat-card"><strong>Actual (2026)</strong><span id="act">-- --</span></div>
                 <div class="stat-card" style="border-color:#f59e0b; color:#f59e0b;"><strong>AI Forecast</strong><span id="eta">TBD</span></div>
             </div>
-            <div class="chart-box"><canvas id="megaHDChart"></canvas></div>
-            <h2 style="font-size:4em; margin-top:100px;">📜 AUDIT HISTORY</h2>
+            <div class="chart-box"><canvas id="finalChart"></canvas></div>
+            
+            <h2 style="font-size:4em; margin-top:100px;">🕒 AUDIT HISTORY</h2>
             <div id="audit-list"></div>
+            
+            <!-- DELETE OPTION -->
+            <button class="clear-btn" onclick="clearLogs()">🗑️ RESET ALL AUDIT LOGS</button>
         </div>
     </div>
 
-    <!-- 4. AI ENGINE (WAKE UP CLOUD BRAIN) -->
-    <div id="ai-engine" class="page">
-        <header>⚡ AI COMMAND HUB</header>
-        <div class="container">
-            <div style="background:#1e293b; padding:100px 50px; border-radius:50px; border:2px solid #334155; margin-top:50px;">
-                <span style="font-size: 150px; display: block; margin-bottom: 40px;">🧠</span>
-                <h2 style="font-size:3em; color:#f59e0b;">Activate Cloud GPU</h2>
-                <p style="font-size:1.5em; color:#94a3b8; margin-bottom:60px;">To ensure real-time predictive auditing, OmniBuild utilizes high-performance cloud accelerators.</p>
-                <a href="https://huggingface.co/spaces/mathusugi/omnibuild-5d-ai" target="_blank" 
-                   style="background: #f59e0b; color: black; padding: 30px 80px; border-radius: 100px; font-weight: 900; font-size: 2.2em; text-decoration: none;">
-                    🚀 LAUNCH AI ENGINE
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <!-- 📱 GIANT 4-TAB NAVIGATION -->
     <nav class="bottom-nav">
         <div onclick="showPage('home')" id="nav-home" class="nav-item active-nav"><span class="nav-icon">🏠</span>HOME</div>
         <div onclick="showPage('ar-view')" id="nav-ar" class="nav-item"><span class="nav-icon">🛡️</span>AR SITE</div>
-        <div onclick="showPage('dashboard')" id="nav-dash" class="nav-item"><span class="nav-icon">📉</span>REPORTS</div>
-        <div onclick="showPage('ai-engine')" id="nav-ai" class="nav-item"><span class="nav-icon">⚡</span>AI BRAIN</div>
+        <div onclick="showPage('dashboard')" id="nav-dash" class="nav-item"><span class="nav-icon">📈</span>REPORTS</div>
     </nav>
 
 <script>
@@ -130,27 +112,13 @@
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
         document.getElementById(pId).classList.add('active');
-        const nId = pId === 'home' ? 'nav-home' : pId === 'ar-view' ? 'nav-ar' : pId === 'dashboard' ? 'nav-dash' : 'nav-ai';
-        document.getElementById(nId).classList.add('active-nav');
+        const navId = pId === 'home' ? 'nav-home' : pId === 'ar-view' ? 'nav-ar' : 'nav-dash';
+        document.getElementById(navId).classList.add('active-nav');
         window.scrollTo(0,0);
     }
 
-    const ctx = document.getElementById('megaHDChart').getContext('2d');
-    let megaHDChart = new Chart(ctx, { type: 'bar', data: { labels: ['PLANNED (2026)', 'ACTUAL (%)'], datasets: [{ data: [100, 0], backgroundColor: ['#3b82f6', '#10b981'], barThickness: 200 }] }, options: { responsive: true, maintainAspectRatio: false, devicePixelRatio: 4, scales: { y: { ticks: { font: { size: 25, weight: 'bold' } } }, x: { ticks: { font: { size: 30, weight: 'bold' } } } } } });
-
-    db.ref('audit_history').on('value', (snap) => {
-        const logs = snap.val();
-        let html = "";
-        if (logs) {
-            Object.keys(logs).reverse().forEach(k => {
-                const item = logs[k];
-                html += `<div class="history-item"><div>DATE: ${item.timestamp}<br><strong>${item.percentage}% - ${item.delay_msg || 'Audit Log'}</strong></div><button class="del-btn" onclick="deleteAudit('${k}')">🗑️</button></div>`;
-            });
-        }
-        document.getElementById('audit-list').innerHTML = html;
-    });
-
-    function deleteAudit(key) { if(confirm("Delete this record?")) { db.ref('audit_history/' + key).remove(); } }
+    const ctx = document.getElementById('finalChart').getContext('2d');
+    let finalChart = new Chart(ctx, { type: 'bar', data: { labels: ['PLANNED', 'ACTUAL'], datasets: [{ label: '% Done', data: [100, 0], backgroundColor: ['#3b82f6', '#10b981'], barThickness: 200 }] }, options: { responsive: true, maintainAspectRatio: false, devicePixelRatio: 4, scales: { y: { ticks: { font: { size: 30, weight: 'bold' } } }, x: { ticks: { font: { size: 35, weight: 'bold' } } } } } });
 
     db.ref('construction_progress').on('value', (snap) => {
         const d = snap.val();
@@ -158,22 +126,31 @@
             document.getElementById('perc').innerText = d.percentage + '%';
             document.getElementById('plan').innerText = d.planned_date || '-- --';
             document.getElementById('act').innerText = d.actual_date || '-- --';
-            document.getElementById('eta').innerText = d.predicted_date || 'TBD';
-            megaHDChart.data.datasets[0].data = [100, d.percentage]; megaHDChart.update();
+            document.getElementById('eta').innerText = d.predicted_date || '...';
+            finalChart.data.datasets[0].data = [100, d.percentage]; finalChart.update();
         }
     });
+
+    db.ref('audit_history').on('value', (snap) => {
+        const logs = snap.val();
+        let html = "";
+        if (logs) {
+            Object.keys(logs).reverse().forEach(k => {
+                const item = logs[k];
+                html += `<div class="history-item">DATE: ${item.timestamp} <br> <strong>Result: ${item.percentage}% - SUCCESS</strong></div>`;
+            });
+        }
+        document.getElementById('audit-list').innerHTML = html;
+    });
+
+    function clearLogs() {
+        if(confirm("Delete all Audit History?")) { db.ref('audit_history').remove(); alert("Logs Cleared!"); }
+    }
 
     document.getElementById('vInp').onchange = function() {
         document.getElementById('upStatus').innerText = "⏳ AI CLOUD SCANNING SITE...";
         db.ref('ai_trigger').set({ status: "start", timestamp: Date.now() });
     };
-
-    db.ref('ai_trigger').on('value', (snap) => {
-        if (snap.val() && snap.val().status === "idle") {
-            document.getElementById('upStatus').style.color = "#10b981";
-            document.getElementById('upStatus').innerText = "✅ AI AUDIT SUCCESS!";
-        }
-    });
 </script>
 </body>
 </html>
