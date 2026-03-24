@@ -3,41 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OmniBuild 5D - AR Site Vision</title>
+    <title>OmniBuild 5D - Site Portal</title>
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
     <style>
         body { margin: 0; background: #000; color: white; font-family: sans-serif; text-align: center; }
-        header { background: #1e293b; padding: 20px; border-bottom: 4px solid #3b82f6; font-weight: 900; font-size: 1.5em; }
+        header { background: #1e293b; padding: 20px; border-bottom: 4px solid #3b82f6; font-weight: 900; }
         model-viewer { width: 100%; height: 75vh; background: #000; }
-        
-        /* 📸 FLOATING QR CODE BOX */
-        .qr-overlay { 
-            position: absolute; top: 100px; right: 20px; background: white; 
-            padding: 10px; border-radius: 15px; border: 3px solid #3b82f6; width: 120px; 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5); z-index: 100;
-        }
-        .qr-overlay img { width: 100%; border-radius: 10px; }
-        .qr-label { color: #0b1120; font-size: 0.6em; font-weight: 900; margin-top: 5px; }
-
-        #ar-button { background: #3b82f6; color: white; border: none; padding: 20px 50px; border-radius: 50px; font-weight: 900; font-size: 1.5em; position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%); }
+        /* 📸 QR CODE OVERLAY */
+        .qr-overlay { position: absolute; top: 120px; right: 20px; background: white; padding: 10px; border-radius: 15px; border: 3px solid #3b82f6; width: 100px; z-index: 100; }
+        #ar-button { background: #3b82f6; color: white; border: none; padding: 15px 40px; border-radius: 50px; font-weight: 900; position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%); }
     </style>
 </head>
 <body>
     <header>🛡️ OMNIBUILD 5D : X-RAY VISION</header>
-
-    <!-- Project QR Display (Paste your QR image link here) -->
     <div class="qr-overlay">
-        <!-- Unga Step 3-la panna andha logo QR image link-ah inga podunga -->
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://mathumithajeyachandran-cloud.github.io/omniar/ar_view.html" alt="QR">
-        <div class="qr-label">SCAN TO SYNC BIM</div>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://mathumithajeyachandran-cloud.github.io/omniar/" style="width:100%;">
+        <p style="color:#000; font-size:10px; font-weight:900; margin-top:5px;">SYNC BIM</p>
     </div>
-
     <model-viewer src="omnibuild.glb" ar camera-controls exposure="1.2" shadow-intensity="1">
         <button slot="ar-button" id="ar-button">🚀 START X-RAY</button>
     </model-viewer>
-
-    <div style="background: #1e293b; padding: 20px; border-radius: 20px 20px 0 0;">
-        <strong>STATUS:</strong> <span style="color:#10b981;">BIM DATA LIVE SYNCED</span>
-    </div>
 </body>
 </html>
