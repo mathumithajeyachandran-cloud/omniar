@@ -74,15 +74,45 @@
         </div>
     </div>
 
-    <!-- AR VIEW PAGE -->
+    <!-- PAGE 2: AR VIEW (Updated with JUMBO Distance Labels) -->
     <div id="ar-view" class="page">
-        <header>🛡️ X-RAY VISION</header>
-        <div class="qr-overlay">
+        <header><h1>🛡️ PRECISION AUDIT</h1></header>
+        
+        <div class="qr-box">
             <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://mathumithajeyachandran-cloud.github.io/omniar/" style="width: 100%;">
-            <p style="color:black; font-size:12px; font-weight:900; margin-top:5px;">SYNC BIM</p>
+            <p style="color:black; font-size:12px; font-weight:900;">SYNC BIM</p>
         </div>
-        <model-viewer src="omnibuild.glb" ar camera-controls exposure="1.2" style="width:100%; height:85vh; background:#000;"></model-viewer>
+
+        <model-viewer src="omnibuild.glb" ar camera-controls exposure="1.2" style="width:100%; height:80vh; background:#000;">
+            
+            <!-- 📏 JUMBO PIPE LABEL -->
+            <button class="hotspot" slot="hotspot-1" data-position="6m 3m 1.2m" data-normal="0m 1m 0m">
+                <div class="annotation">📏 Length: 10.0 m<br>⬆️ Height: 1.2 m</div>
+            </button>
+
+            <!-- 📏 JUMBO ELECTRICAL LABEL -->
+            <button class="hotspot" slot="hotspot-2" data-position="0m 3m 2.4m" data-normal="0m 1m 0m">
+                <div class="annotation">📏 Length: 12.0 m<br>⬆️ Height: 2.4 m</div>
+            </button>
+
+            <button slot="ar-button" style="background:#3b82f6; color:white; border:none; padding:30px 80px; border-radius:100px; position:absolute; bottom:80px; left:50%; transform:translateX(-50%); font-weight:900; font-size:2em;">🚀 START X-RAY</button>
+        </model-viewer>
+
+        <div style="background:#1e293b; padding:30px; border-radius:30px 30px 0 0; margin-top:-20px;">
+            <p style="font-size:1.5em; font-weight:900;">STATUS: <span style="color:#10b981;">MEASUREMENTS SYNCED</span></p>
+        </div>
     </div>
+
+    <!-- Style section-kulla idhai sethukkalaam -->
+    <style>
+        .hotspot { background: #3b82f6; border-radius: 50%; width: 35px; height: 35px; border: 4px solid white; cursor: pointer; box-shadow: 0 0 20px rgba(59,130,246,0.8); }
+        .annotation {
+            background: white; color: black; padding: 20px; border-radius: 20px;
+            font-size: 1.5em; font-weight: 900; position: absolute; width: 250px;
+            transform: translate(30px, -30px); border-left: 15px solid #3b82f6;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5); text-align: left;
+        }
+    </style>
 
     <!-- REPORTS PAGE -->
     <div id="dashboard" class="page">
