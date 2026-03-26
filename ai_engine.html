@@ -3,29 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OmniBuild 5D - AI Hub</title>
+    <title>OmniBuild 5D - AI Control Hub</title>
+    <!-- Jumbo Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@800;900&family=Fira+Code:wght@500&display=swap" rel="stylesheet">
+    <!-- Firebase Standard Libs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    
     <style>
-        body { font-family: sans-serif; margin: 0; background: #0b1120; color: white; text-align: center; }
-        header { background: linear-gradient(180deg, #1e293b, #0b1120); padding: 70px 20px; border-bottom: 10px solid #f59e0b; }
-        .container { max-width: 1000px; margin: 60px auto; padding: 50px; background: #161e2d; border-radius: 50px; border: 4px solid #334155; }
-        .launch-btn { background: #f59e0b; color: #000; padding: 30px 80px; border-radius: 100px; font-weight: 900; font-size: 2.5em; text-decoration: none; display: inline-block; box-shadow: 0 20px 40px rgba(245, 158, 11, 0.4); }
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 160px; background: #111827; display: flex; justify-content: space-around; align-items: center; border-top: 10px solid #3b82f6; }
-        .nav-item { color: #555; text-decoration: none; text-align: center; font-size: 1.5em; font-weight: 900; flex: 1; }
-        .nav-item.active { color: #3b82f6; }
+        /* EXTREME JUMBO STYLE */
+        body { font-family: 'Inter', sans-serif; margin: 0; background: #0b1120; color: white; overflow-x: hidden; text-align: center; padding-bottom: 220px; }
+        header { background: #1e293b; padding: 50px; border-bottom: 10px solid #f59e0b; font-size: 2.5em; font-weight: 900; color: #f59e0b; }
+        .container { max-width: 1200px; margin: 50px auto; padding: 0 40px; }
+
+        /* 💻 JUMBO CODE CONSOLE WINDOW */
+        .code-window {
+            background: #161e2d; border-radius: 40px; border: 4px solid #334155;
+            text-align: left; overflow: hidden; box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+            margin-bottom: 50px;
+        }
+        .code-top { background: #334155; padding: 20px 40px; display: flex; justify-content: space-between; font-size: 1.2em; font-weight: 900; }
+        .code-body { 
+            padding: 40px; font-family: 'Fira Code', monospace; 
+            font-size: 1.5em; color: #10b981; line-height: 1.6;
+            white-space: pre; overflow-x: auto;
+        }
+
+        /* GIANT ACTION BUTTON */
+        .big-btn { 
+            background: #f59e0b; color: black; padding: 30px 100px; 
+            border-radius: 120px; font-weight: 900; font-size: 2.2em; cursor: pointer; 
+            text-decoration: none; display: inline-block; transition: 0.3s;
+            box-shadow: 0 15px 40px rgba(245, 158, 11, 0.4);
+        }
+        .big-btn:hover { transform: scale(1.05); background: #fbbf24; }
+
+        /* JUMBO BOTTOM NAV (4 TABS) */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 180px; background: #111827; display: flex; justify-content: space-around; align-items: center; border-top: 10px solid #3b82f6; z-index: 1000; }
+        .nav-item { color: #555; text-decoration: none; text-align: center; font-size: 1.8em; font-weight: 900; flex: 1; }
+        .active-nav { color: #3b82f6; background: rgba(59,130,246,0.1); border-top: 8px solid #3b82f6; }
+        .nav-icon { font-size: 80px; display: block; margin-bottom: 10px; }
     </style>
 </head>
 <body>
-    <header><h1>⚡ AI ENGINE CONTROL</h1></header>
+
+    <header>⚡ AI COMMAND CENTER</header>
+
     <div class="container">
-        <h2>Launch Cloud Brain</h2>
-        <p>Using Serverless GPU Engine</p><br><br>
-        <a href="https://huggingface.co/spaces/mathusugi/omnibuild-5d-ai" target="_blank" class="launch-btn">🚀 ACTIVATE AI</a>
+        
+        <!-- THE CODE CONSOLE VIEW (Therira madhiri sethurukaen) -->
+        <div class="code-window">
+            <div class="code-top">
+                <span>● ● ●  omnibuild_v2_engine.py</span>
+                <span style="color: #94a3b8;">Python 3.12 | GPU Ready</span>
+            </div>
+            <div class="code-body">
+# OMNIBUILD 5D AUTONOMOUS BRAIN
+from ultralytics import YOLO
+import firebase_bridge
+
+model = YOLO('omnibuild_pro.pt')
+
+def run_site_audit():
+   # 1. Process Video Frames
+   # 2. Extract 5D Measurements
+   # 3. Predict Estimated Finish Date
+   # 4. Sync Millisecond Data to Dashboard
+   print("✅ HUB SYNC SUCCESSFUL")
+            </div>
+        </div>
+
+        <!-- GIANT ACTIVATION BUTTON -->
+        <a href="https://huggingface.co/spaces/mathusugi/omnibuild-5d-ai" target="_blank" class="big-btn">
+            🚀 ACTIVATE CLOUD BRAIN
+        </a>
+
+        <p style="color: #94a3b8; font-size: 1.2em; margin-top: 50px; font-weight: bold;">
+            *Launch the backend GPU engine above to enable real-time 5D analytics.
+        </p>
+
     </div>
+
+    <!-- JUMBO NAVIGATION -->
     <nav class="bottom-nav">
-        <a href="index.html" class="nav-item">🏠 HOME</a>
-        <a href="ar_view.html" class="nav-item">🛡️ AR SITE</a>
-        <a href="dashboard.html" class="nav-item">📉 REPORTS</a>
-        <a href="ai_engine.html" class="nav-item active">⚡ AI BRAIN</a>
+        <a href="index.html" class="nav-item"><span class="nav-icon">🏠</span>HOME</a>
+        <a href="ar_view.html" class="nav-item"><span class="nav-icon">🛡️</span>AR SITE</a>
+        <a href="dashboard.html" class="nav-item"><span class="nav-icon">📉</span>REPORTS</a>
+        <a href="ai_engine.html" class="nav-item active-nav"><span class="nav-icon">⚡</span>AI BRAIN</a>
     </nav>
+
 </body>
 </html>
