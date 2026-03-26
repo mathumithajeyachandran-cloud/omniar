@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OmniBuild 5D Pro - Ultimate Hub</title>
+    <title>OmniBuild 5D Pro - Ultimate Jumbo Hub</title>
     <link rel="manifest" href="manifest.json">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@800;900&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
@@ -12,101 +12,106 @@
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
 
     <style>
-        /* MEGA JUMBO HD STYLE */
-        body { font-family: 'Inter', sans-serif; margin: 0; background: #0b1120; color: white; overflow-x: hidden; text-align: center; padding-bottom: 220px; }
+        /* EXTREME JUMBO HD STYLE */
+        body { font-family: 'Inter', sans-serif; margin: 0; background: #0b1120; color: white; overflow-x: hidden; text-align: center; padding-bottom: 250px; }
         .page { display: none; width: 100vw; min-height: 100vh; position: absolute; top: 0; left: 0; overflow-y: auto; }
         .active { display: block; }
-        header { background: #1e293b; padding: 50px; border-bottom: 10px solid #3b82f6; font-size: 3.5em; font-weight: 900; color: #3b82f6; text-transform: uppercase; }
+        header { background: #1e293b; padding: 50px; border-bottom: 12px solid #3b82f6; font-size: 3.5em; font-weight: 900; color: #3b82f6; text-transform: uppercase; }
+
         .container { max-width: 1200px; margin: 40px auto; padding: 0 40px; }
+
+        /* JUMBO CARDS */
+        .giant-card { background: linear-gradient(135deg, #1e293b, #0f172a); padding: 80px 40px; border-radius: 50px; border: 6px solid #334155; cursor: pointer; transition: 0.4s; }
+        .giant-icon { font-size: 130px; display: block; margin-bottom: 20px; }
+
+        /* 📏 EXTREME JUMBO AR LABELS (PRECISION) */
+        .hotspot { background: #3b82f6; border-radius: 50%; width: 50px; height: 50px; border: 5px solid white; cursor: pointer; box-shadow: 0 0 40px #3b82f6; }
+        .annotation { 
+            background: white; color: #0b1120; padding: 30px; border-radius: 30px; 
+            font-size: 2em; font-weight: 900; position: absolute; width: 450px; 
+            transform: translate(45px, -45px); display: none; text-align: left; 
+            box-shadow: 0 25px 60px rgba(0,0,0,0.6); border-left: 25px solid #3b82f6; 
+        }
+        .hotspot:hover .annotation { display: block; }
 
         /* REPORTS GRID */
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 30px; }
         .stat-card { padding: 35px; background: #1e293b; border-radius: 30px; border-bottom: 10px solid #3b82f6; }
-        .stat-card strong { font-size: 0.9em; color: #94a3b8; text-transform: uppercase; }
-        .stat-card span { font-size: 2.2em; font-weight: 900; display: block; margin-top: 10px; }
+        .stat-card span { font-size: 2.5em; font-weight: 900; display: block; margin-top: 10px; }
 
-        /* 📉 CHART CARD */
-        .chart-box { background: white !important; padding: 50px; border-radius: 50px; height: 750px; margin-top: 60px; box-shadow: 0 30px 60px rgba(0,0,0,0.5); }
+        /* CHART & HISTORY */
+        .chart-box { background: white !important; padding: 60px; border-radius: 60px; height: 800px; margin-top: 60px; box-shadow: 0 30px 60px rgba(0,0,0,0.5); }
+        .history-box { background: #1e293b; padding: 45px; border-radius: 40px; margin-bottom: 25px; text-align: left; border: 2px solid #334155; border-left: 20px solid #10b981; font-size: 2em; display: flex; justify-content: space-between; align-items: center; }
+        .del-btn { background: #ef4444; color: white; border: none; padding: 20px 40px; border-radius: 15px; font-weight: 900; cursor: pointer; font-size: 0.8em; }
 
-        /* 📜 AUDIT HISTORY (The Form System) */
-        .history-box { 
-            background: #1e293b; padding: 40px; border-radius: 40px; 
-            margin-bottom: 25px; text-align: left; border: 1px solid #334155; 
-            border-left: 20px solid #10b981; display: flex; justify-content: space-between; align-items: center;
-        }
-        .history-info { font-size: 1.8em; }
-        .history-info b { color: #10b981; }
-
-        /* DELETE BUTTONS */
-        .del-btn { background: #ef4444; color: white; border: none; padding: 15px 30px; border-radius: 15px; font-weight: 900; font-size: 1em; cursor: pointer; }
-        .clear-all { background: #dc3545; color: white; padding: 30px; width: 100%; border-radius: 20px; font-weight: 900; font-size: 1.8em; border: none; cursor: pointer; margin-top: 60px; }
-
-        /* BOTTOM NAVIGATION */
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 180px; background: #111827; display: flex; justify-content: space-around; align-items: center; border-top: 10px solid #3b82f6; z-index: 1000; }
-        .nav-item { color: #555; text-decoration: none; text-align: center; font-size: 1.8em; font-weight: 900; flex: 1; cursor: pointer; }
-        .active-nav { color: #3b82f6; background: rgba(59,130,246,0.1); border-top: 8px solid #3b82f6; }
-        .nav-icon { font-size: 80px; display: block; margin-bottom: 10px; }
+        /* 📱 JUMBO BOTTOM NAVIGATION (4 TABS) */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: 200px; background: #111827; display: flex; justify-content: space-around; align-items: center; border-top: 10px solid #3b82f6; z-index: 1000; box-shadow: 0 -30px 60px rgba(0,0,0,0.8); }
+        .nav-item { color: #555; text-decoration: none; text-align: center; font-size: 2.2em; font-weight: 900; flex: 1; cursor: pointer; }
+        .active-nav { color: #3b82f6; background: rgba(59,130,246,0.1); border-top: 10px solid #3b82f6; }
+        .nav-icon { font-size: 90px; display: block; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
     <!-- PORTAL 1: HUB -->
     <div id="home" class="page active">
-        <header>OMNIBUILD 5D</header>
+        <header>OMNIBUILD 5D HUB</header>
         <div class="container">
-            <div style="background: rgba(59, 130, 246, 0.1); padding: 80px; border-radius: 60px; border: 8px dashed #3b82f6; margin-bottom: 50px;">
-                <h2 style="font-size:3em;">System Engine Active</h2>
-                <p style="font-size:1.5em; color:#94a3b8;">Launch AI tab to start a new Site Audit</p>
+            <div style="background: rgba(59, 130, 246, 0.1); padding: 100px 40px; border-radius: 60px; border: 8px dashed #3b82f6; margin-bottom: 60px;">
+                <h2 style="font-size: 4em;">AUDIT SYSTEM READY</h2>
+                <p style="font-size: 2em; color:#94a3b8;">Metadata & GPU Accelerators Online</p>
             </div>
-            <div class="portal-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
-                <div onclick="showPage('ar-view')" style="background: #1e293b; padding: 80px 40px; border-radius: 50px; border: 4px solid #334155; cursor: pointer;">🛡️<br><h2 style="color:#3b82f6; font-size:3em;">AR SITE</h2></div>
-                <div onclick="showPage('dashboard')" style="background: #1e293b; padding: 80px 40px; border-radius: 50px; border: 4px solid #334155; cursor: pointer;">📈<br><h2 style="color:#3b82f6; font-size:3em;">REPORTS</h2></div>
+            <div class="portal-grid">
+                <div class="giant-card" onclick="showPage('ar-view')"><span class="giant-icon">🛡️</span><h2>AR SITE</h2></div>
+                <div class="giant-card" onclick="showPage('dashboard')"><span class="giant-icon">📈</span><h2>REPORTS</h2></div>
             </div>
         </div>
     </div>
 
-    <!-- PORTAL 2: AR VIEW -->
+    <!-- PORTAL 2: AR VIEW (Jumbo QR + Dynamic Precision Labels) -->
     <div id="ar-view" class="page">
         <header>🛡️ X-RAY VISION</header>
-        <div style="position: absolute; top: 120px; right: 20px; background: white; padding: 15px; border-radius: 20px; border: 4px solid #3b82f6; width: 140px; z-index: 100; text-align:center;">
+        <div style="position: absolute; top: 120px; right: 30px; background: white; padding: 20px; border-radius: 30px; border: 5px solid #3b82f6; width: 160px; z-index: 100; text-align:center;">
             <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://mathumithajeyachandran-cloud.github.io/omniar/" style="width: 100%;">
-            <p style="color:black; font-size:12px; font-weight:900; margin:5px 0;">SYNC BIM</p>
+            <p style="color:black; font-size:14px; font-weight:900; margin-top:8px;">SCAN BIM</p>
         </div>
-        <model-viewer src="omnibuild.glb" ar camera-controls exposure="1.2" style="width:100%; height:85vh; background:#000;"></model-viewer>
+        <model-viewer src="omnibuild.glb" ar camera-controls exposure="1.2" style="width:100%; height:80vh; background:#000;">
+            <!-- 🔵 JUMBO PIPE LABEL (HEIGHT + OFFSET) -->
+            <button class="hotspot" slot="hotspot-pipe" data-position="6m 3m 1.2m" data-normal="0m 1m 0m">
+                <div class="annotation" id="ar-pipe-label">📏 Fetching Precision Data...</div>
+            </button>
+            <!-- 🟡 JUMBO ELECTRICAL LABEL (HEIGHT + OFFSET) -->
+            <button class="hotspot" slot="hotspot-elec" data-position="0m 3m 2.4m" data-normal="0m 1m 0m">
+                <div class="annotation" id="ar-elec-label">⚡ Fetching Precision Data...</div>
+            </button>
+        </model-viewer>
+        <div style="background:#1e293b; padding:40px; border-radius:40px 40px 0 0; margin-top:-20px;"><h2 style="color:#10b981; font-size:3em;">✅ PRECISION OFFSETS SYNCED</h2></div>
     </div>
 
-    <!-- PORTAL 3: REPORTS (Month style + HISTORY + DELETE) -->
+    <!-- PORTAL 3: REPORTS -->
     <div id="dashboard" class="page">
-        <header>📈 5D REPORTS</header>
+        <header>📈 5D PERFORMANCE</header>
         <div class="container">
-            <div id="perc" style="font-size: 10em; font-weight: 900; color: #10b981; margin: 40px 0;">0%</div>
-            
-            <!-- MONTH STYLE CARDS -->
+            <div id="perc" style="font-size: 12em; font-weight: 900; color: #10b981; margin: 40px 0;">0%</div>
             <div class="stats-grid">
                 <div class="stat-card"><strong>Planned Finish</strong><span id="plan">-- --</span></div>
                 <div class="stat-card"><strong>Current Audit</strong><span id="act">-- --</span></div>
                 <div class="stat-card" style="border-color:#f59e0b; color:#f59e0b;"><strong>AI Forecast</strong><span id="eta">TBD</span></div>
             </div>
-
             <div class="chart-box"><canvas id="masterHDChart"></canvas></div>
-
-            <h2 style="font-size:4em; margin-top:100px; text-align:left;">📜 AUDIT HISTORY</h2>
-            
-            <!-- 🟢 DYNAMIC HISTORY LIST (With Delete Buttons) -->
+            <h2 style="font-size:5em; margin-top:100px; text-align:left;">📜 AUDIT HISTORY</h2>
             <div id="audit-list"></div>
-
-            <!-- GLOBAL CLEAR BUTTON -->
-            <button class="clear-all" onclick="clearAll()">🗑️ DELETE ALL SITE HISTORY</button>
         </div>
     </div>
 
     <!-- PORTAL 4: AI BRAIN -->
     <div id="ai-engine" class="page">
-        <header>🧠 AI COMMAND HUB</header>
+        <header>🧠 AI COMMAND CENTER</header>
         <div class="container">
-            <div style="background:#1e293b; padding:100px; border-radius:60px; border:2px dashed #f59e0b; margin-top:50px;">
-                <h2 style="font-size:3.5em;">Launch Cloud Engine</h2>
-                <a href="https://huggingface.co/spaces/mathusugi/omnibuild-5d-ai" target="_blank" style="background:#f59e0b; color:black; padding:35px 100px; border-radius:120px; font-weight:900; font-size:2em; text-decoration:none; display:inline-block; margin-top:40px;">🚀 ACTIVATE BRAIN</a>
+            <div style="background:#1e293b; padding:100px; border-radius:60px; border:3px dashed #f59e0b; margin-top:50px;">
+                <span style="font-size: 200px; display: block; margin-bottom: 50px;">🧠</span>
+                <h2 style="font-size:4em; color:#f59e0b;">Activate Cloud Brain</h2>
+                <a href="https://huggingface.co/spaces/mathusugi/omnibuild-5d-ai" target="_blank" style="background:#f59e0b; color:black; padding:40px 100px; border-radius:120px; font-weight:900; font-size:2.5em; text-decoration:none; display:inline-block; margin-top:50px;">🚀 LAUNCH ENGINE</a>
             </div>
         </div>
     </div>
@@ -133,27 +138,7 @@
     }
 
     const ctx = document.getElementById('masterHDChart').getContext('2d');
-    let masterHDChart = new Chart(ctx, { type: 'bar', data: { labels: ['PLANNED (2026)', 'SITE ACTUAL (%)'], datasets: [{ data: [100, 0], backgroundColor: ['#3b82f6', '#10b981'], barThickness: 250, borderRadius: 25 }] }, options: { responsive: true, maintainAspectRatio: false, devicePixelRatio: 4, scales: { y: { ticks: { font: { size: 25, weight: 'bold' } } }, x: { ticks: { font: { size: 30, weight: 'bold' } } } } } });
-
-    // 🟢 DYNAMIC HISTORY LISTENER
-    db.ref('audit_history').on('value', (snap) => {
-        const logs = snap.val();
-        let html = "";
-        if (logs) {
-            Object.keys(logs).reverse().forEach(key => {
-                const item = logs[key];
-                html += `
-                    <div class="history-box">
-                        <div class="history-info">
-                            DATE: <b>${item.timestamp}</b><br>
-                            RESULT: <b>${item.percentage}%</b> - ${item.delay_msg || 'Audit Success'}
-                        </div>
-                        <button class="del-btn" onclick="deleteEntry('${key}')">❌ DELETE</button>
-                    </div>`;
-            });
-        } else { html = "<h3 style='color:#555;'>No history records found.</h3>"; }
-        document.getElementById('audit-list').innerHTML = html;
-    });
+    let masterHDChart = new Chart(ctx, { type: 'bar', data: { labels: ['PLANNED (2026)', 'SITE ACTUAL (%)'], datasets: [{ data: [100, 0], backgroundColor: ['#3b82f6', '#10b981'], barThickness: 250, borderRadius: 30 }] }, options: { responsive: true, maintainAspectRatio: false, devicePixelRatio: 4, scales: { y: { ticks: { font: { size: 35, weight: 'bold' } } }, x: { ticks: { font: { size: 40, weight: '900' } } } } } });
 
     db.ref('construction_progress').on('value', (snap) => {
         const d = snap.val();
@@ -162,12 +147,27 @@
             document.getElementById('plan').innerText = d.planned_date || '-- --';
             document.getElementById('act').innerText = d.actual_date || '-- --';
             document.getElementById('eta').innerText = d.predicted_date || '...';
+            
+            // 🚀 DYNAMIC JUMBO MEASUREMENTS (OFFSET + HEIGHT)
+            document.getElementById('ar-pipe-label').innerHTML = `🛠️ <b>PLUMBING AUDIT</b><br>⬅️ Offset: ${d.p_offset || '2.50m'}<br>⬆️ Height: ${d.p_h || '1.20m'}`;
+            document.getElementById('ar-elec-label').innerHTML = `⚡ <b>ELECTRICAL AUDIT</b><br>⬅️ Offset: ${d.e_offset || '1.80m'}<br>⬆️ Height: ${d.e_h || '2.40m'}`;
             masterHDChart.data.datasets[0].data = [100, d.percentage]; masterHDChart.update();
         }
     });
 
-    function deleteEntry(key) { if(confirm("Permanently delete this audit record?")) db.ref('audit_history').child(key).remove(); }
-    function clearAll() { if(confirm("Are you sure you want to WIPE ALL site history?")) db.ref('audit_history').remove(); }
+    db.ref('audit_history').on('value', (snap) => {
+        const logs = snap.val();
+        let html = "";
+        if (logs) {
+            Object.keys(logs).reverse().forEach(k => {
+                const item = logs[k];
+                html += `<div class="history-box"><div>DATE: ${item.timestamp}<br><b>RESULT: ${item.percentage}% - ${item.status}</b></div><button class="del-btn" onclick="deleteLog('${k}')">❌ DELETE</button></div>`;
+            });
+        }
+        document.getElementById('audit-list').innerHTML = html;
+    });
+
+    function deleteLog(key) { if(confirm("Permanently delete this audit entry?")) db.ref('audit_history').child(key).remove(); }
 </script>
 </body>
 </html>
